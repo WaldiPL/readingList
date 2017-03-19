@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "Reading List"
+  },
+  "extensionDescription": {
+    "message": "One-click save page for later."
+  },
+  "extensionAction": {
+    "message": "Add to Reading list"
+  },
+  "deletePage": {
+    "message": "Delete from Reading list"
+  }
+}

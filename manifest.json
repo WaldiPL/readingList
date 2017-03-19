@@ -1,0 +1,41 @@
+{
+  "applications": {
+    "gecko": {
+      "id": "readinglist@waldemar.b",
+      "strict_min_version": "54.0a1"
+    }
+  },
+  "permissions": [
+	  "tabs",
+	  "storage",
+	  "<all_urls>"
+  ],
+  "sidebar_action": {
+	"default_title": "__MSG_extensionName__",
+	"default_panel": "sidebar.html",
+	"default_icon": "icons/icon.svg"
+  }, 
+  "browser_action": {
+	"default_title": "__MSG_extensionAction__",
+	"default_icon": "icons/btn.svg#a"
+  },
+  "background": {
+    "page": "bg.html"
+  },
+  "commands": {
+	  "_execute_sidebar_action": {
+		"suggested_key": {
+		  "default": "Ctrl+Q",
+		  "mac": "Command+Q"
+		}
+	  }
+  },
+  "description": "__MSG_extensionDescription__",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "name": "__MSG_extensionName__",
+  "version": "1.1",
+  "icons": {
+    "48": "icons/icon.svg"
+  }
+}

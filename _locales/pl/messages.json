@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "Czytelnia"
+  },
+  "extensionDescription": {
+    "message": "Jednym kliknięciem zachowaj stronę na później."
+  },
+  "extensionAction": {
+    "message": "Dodaj do czytelni"
+  },
+  "deletePage": {
+    "message": "Usuń z czytelni"
+  }
+}

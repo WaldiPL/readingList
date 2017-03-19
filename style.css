@@ -1,0 +1,102 @@
+body{
+	padding:0;
+	margin:0;	
+	background:#fbfbfb;
+	overflow-x:hidden;
+	width:100%;
+}
+
+.pages{
+	padding: 5px;
+	height:50px;
+	background: #fbfbfb;
+	font-size: 12px;
+	text-decoration: none;
+	color: #444;
+	border:1px solid transparent;
+	display: flex;
+	flex-flow: row;
+}
+
+.pages:hover{
+	background:#e8e8e8;
+	border:1px solid #d0d0d0;
+}
+
+a{
+	display:inline-block;
+	font-size: 12px;
+	text-decoration: none;
+	color: #444;
+	height:50px;
+	display: flex;
+	flex-flow: row;
+	flex-grow: 1;
+	max-width: 100%;
+}
+
+.thumb{
+	display:block;
+	height:40px;
+	min-width:64px;
+	width:64px;
+	border:1px solid #c7c7c7;
+	margin:3px 10px 3px 3px;
+	padding:2px;
+	background:#fff;
+}
+
+.favicon{
+	background:#fbfbfb;
+	position: relative;
+	top: -25px;
+	left: 3px;
+	height:16px;
+	width:16px;
+	border:1px solid #c7c7c7;
+	padding:2px;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+}
+
+.title{
+	overflow: hidden;
+	max-height: 30px;
+	line-height: 15px;
+	overflow-wrap: break-word;
+}
+
+.url{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-height:15px;
+  line-height: 15px;
+  color: #0095DD;
+}
+
+.delete{
+	height:16px;
+	width:0;
+	float:right;
+	background:#d82016;
+	margin:-62px -33px 0 0;
+	padding:23px 0px;
+	position:relative;
+}
+
+.delete:hover{
+	background:#951400;
+}
+
+.pages:hover +.delete, .delete:hover{
+	display:block;
+	margin-right:0;
+	width:17px;
+	padding:23px 8px;
+	transition:margin-right 150ms 100ms ease-in-out;
+}
