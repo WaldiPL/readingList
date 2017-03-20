@@ -1,6 +1,9 @@
 # Reading List
 One-click save page for later, come back to it in free time.
 
+## Screenshot
+![](screenshots/1.png)
+
 ## Requirements
 - Firefox 54+
 
