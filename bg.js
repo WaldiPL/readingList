@@ -1,7 +1,7 @@
 var urlList=[];
 
 (function(){
-	browser.storage.local.get().then(result =>{
+	browser.storage.local.get().then(result=>{
 		let pages = result.pages;
 		if(!pages)browser.storage.local.set({pages:[],thumbs:[]});
 		else{
@@ -80,7 +80,7 @@ function remove(tab,il){
 }
 
 function save(tab,base64){
-	browser.storage.local.get().then(result ==>{
+	browser.storage.local.get().then(result=>{
 		let pages = result.pages;
 		let thumbs = result.thumbs;
 		let page={
