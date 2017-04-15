@@ -13,4 +13,4 @@ One-click save page for later, come back to it in free time.
 - <all_urls> (for thumbails)
 
 ## Download
-https://addons.mozilla.org/pl/firefox/addon/readinglist/
+https://addons.mozilla.org/en-us/firefox/addon/readinglist/
