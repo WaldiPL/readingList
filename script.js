@@ -33,27 +33,30 @@ function list(){
 		});
 	});
 }
+var timeout1;
 function deleteLeter(id){
-	document.getElementsByClassName("pages")[id].classList.toggle("deleting");
+	let pages=document.getElementsByClassName("pages")[id].classList;
+	pages.toggle("deleting");
 	document.getElementsByClassName("delete")[id].classList.toggle("deleting");
 	document.getElementById("readinglist").classList.toggle("deleting");
-	setTimeout(()=>{deletePage(id);},2000);
+	if(pages.contains("deleting")){
+		timeout1=setTimeout(function(){deletePage(id);},2000);
+	}else{
+		clearTimeout(timeout1);
+	}
 }
 
 function deletePage(id){
-	let deleting=document.getElementsByClassName("pages")[id].classList.contains("deleting");
-	if(deleting){
-		browser.storage.local.get().then(result=>{
-			let pages=result.pages;
-			let thumbs=result.thumbs;
-			pages.splice(id,1);
-			thumbs.splice(id,1);
-			browser.storage.local.set({pages:pages,thumbs:thumbs});
-		}).then(()=>{
-			list();
-			browser.runtime.sendMessage({"deleted":true,"id":id});
-		});
-	}
+	browser.storage.local.get().then(result=>{
+		let pages=result.pages;
+		let thumbs=result.thumbs;
+		pages.splice(id,1);
+		thumbs.splice(id,1);
+		browser.storage.local.set({pages:pages,thumbs:thumbs});
+	}).then(()=>{
+		list();
+		browser.runtime.sendMessage({"deleted":true,"id":id});
+	});
 }
 
 function hover(id){
