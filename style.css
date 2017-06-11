@@ -1,6 +1,6 @@
 body{
 	padding:0;
-	margin:0;	
+	margin:0;
 	background:#fbfbfb;
 	overflow-x:hidden;
 	width:100%;
@@ -12,13 +12,12 @@ body{
 	background: #fbfbfb;
 	font-size: 12px;
 	text-decoration: none;
-	color: #444;
 	border:1px solid transparent;
 	display: flex;
 	flex-flow: row;
 }
 
-.pages:hover{
+.pages:hover, .pages.hover{
 	background:#e8e8e8;
 	border:1px solid #d0d0d0;
 }
@@ -58,9 +57,9 @@ a{
 }
 
 .box {
-  display: flex;
-  flex-flow: column;
-  overflow: hidden;
+	display: flex;
+	flex-flow: column;
+	overflow: hidden;
 }
 
 .title{
@@ -71,32 +70,67 @@ a{
 }
 
 .url{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-height:15px;
-  line-height: 15px;
-  color: #0095DD;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-height:15px;
+	line-height: 15px;
+	color: #0095DD;
 }
 
 .delete{
 	height:16px;
 	width:0;
 	float:right;
-	background:#d82016;
+	background:#d82016 url("icons/trash.svg") no-repeat center;
 	margin:-62px -33px 0 0;
 	padding:23px 0px;
 	position:relative;
 }
 
 .delete:hover{
-	background:#951400;
+	background:#951400 url("icons/trash.svg") no-repeat center;
 }
 
-.pages:hover +.delete, .delete:hover{
+.pages:hover + .delete, .delete:hover{
 	display:block;
 	margin-right:0;
 	width:17px;
 	padding:23px 8px;
 	transition:margin-right 150ms 100ms ease-in-out;
+}
+
+.pages.deleting{
+	opacity:.3;
+	height:0;
+	padding:0 5px;
+	border-width:0px;
+	transition:	opacity 200ms,
+				height 200ms 1800ms,
+				padding 200ms 1800ms,
+				border-width 200ms 1800ms;
+}
+
+.delete.deleting{
+	display:block;
+	margin-right:0;
+	width:17px;
+	padding:23px 8px;
+	background:#f0b8b5 url("icons/undo.svg") no-repeat center;
+	opacity:0;
+	transition:	background-color 200ms,
+				opacity 200ms 1700ms;
+}
+
+.pages.deleting a{
+	opacity:0;
+	visibility:hidden;
+	transition:	opacity 200ms 1800ms,
+				visibility 2000ms;
+}
+
+#readinglist.deleting .delete:not(.deleting){
+	width:0 !important;
+	margin:-62px -33px 0 0 !important;
+	padding:23px 0px !important;
 }
