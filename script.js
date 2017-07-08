@@ -4,35 +4,50 @@
 
 function list(){
 	browser.storage.local.get().then(result=>{
-		document.getElementById("readinglist").classList.remove("deleting");
-		document.getElementById("readinglist").innerHTML="";
-		let pages=result.pages;
-		let thumbs=result.thumbs;
+		let pages=result.pages,
+			thumbs=result.thumbs,
+			container=document.getElementById("readinglist");
+		container.className="";
+		container.textContent="";
 		pages.forEach((value,i)=>{
-			document.getElementById("readinglist").innerHTML+=`
-			<div class="pages">
-				<a href="${value.url}">
-					<div class="boxThumb">
-						<img class="thumb" src="${thumbs[i].base}"/>
-						<img class="favicon" src="${value.favicon}"/>
-					</div>
-					<div class="box">
-						<div class="title">${value.title}</div>
-						<div class="url">${value.domain}</div>
-					</div>
-				</a>
-			</div>
-			<div class="delete"></div>`;
-		});
-	}).then(()=>{
-		let elm=document.getElementsByClassName("delete");
-		[...elm].forEach((value,i)=>{
-			value.addEventListener("click",()=>{deleteLeter(i);});
-			value.addEventListener("mouseover",()=>{hover(i);});
-			value.addEventListener("mouseout",()=>{hover(i);});
+			let ePages=document.createElement("div");
+				ePages.className="pages";
+			let eA=document.createElement("a");
+				eA.href=value.url;
+			let eBoxThumb=document.createElement("div");
+				eBoxThumb.className="boxThumb";
+			let eThumb=document.createElement("img");
+				eThumb.className="thumb";
+				eThumb.src=thumbs[i].base;
+			let eFavicon=document.createElement("img");
+				eFavicon.src=value.favicon;
+				eFavicon.className="favicon";
+			let eBox=document.createElement("div");
+				eBox.className="box";
+			let eTitle=document.createElement("div");
+				eTitle.className="title";
+				eTitle.textContent=value.title;
+			let eUrl=document.createElement("div");
+				eUrl.className="url";
+				eUrl.textContent=value.domain;
+			let eDelete=document.createElement("div");
+				eDelete.className="delete";
+				eDelete.addEventListener("click",()=>{deleteLeter(i);});
+				eDelete.addEventListener("mouseover",()=>{hover(i);});
+				eDelete.addEventListener("mouseout",()=>{hover(i);});
+			ePages.appendChild(eA);
+			eA.appendChild(eBoxThumb);
+			eA.appendChild(eBox);
+			eBoxThumb.appendChild(eThumb);
+			eBoxThumb.appendChild(eFavicon);
+			eBox.appendChild(eTitle);
+			eBox.appendChild(eUrl);
+			container.appendChild(ePages);
+			container.appendChild(eDelete);
 		});
 	});
 }
+
 var timeout1;
 function deleteLeter(id){
 	let pages=document.getElementsByClassName("pages")[id].classList;
