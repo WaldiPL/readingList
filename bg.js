@@ -13,7 +13,7 @@ var urlList=[];
 })();
 
 browser.runtime.onMessage.addListener(run);
-function run(m){
+function run(m,s){
 	if(m.deleted){
 		browser.tabs.query({
 			url:urlList[m.id]
@@ -23,6 +23,8 @@ function run(m){
 				setIcon(tab[0].id,tab[0].url);
 			}
 		});
+	}else if(m.fromContent){
+		remove(s.tab,onList(s.url));
 	}
 }
 
@@ -46,6 +48,7 @@ function setIcon(tabId,url){
 	browser.browserAction.setTitle({
 		title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction")
 	});
+	a>=0?insert(tabId,false):insert(tabId,true);
 }
 
 function onList(url){
@@ -116,4 +119,26 @@ function resize(src,callback){
 		callback(dataURL);
 	};
 	img.src = src;
+}
+
+function insert(tabId,del){
+	if(del){
+		browser.tabs.executeScript(
+			tabId,{
+			code:`(function(){
+				const toolbar=document.getElementById("readinglistToolbar");
+				toolbar.className="hidden";
+				setTimeout(()=>{toolbar.remove();},200);
+			})();`
+		});
+	}else{
+		browser.tabs.executeScript(
+			tabId,{
+			file:"/insert.js"
+		});
+		browser.tabs.insertCSS(
+			tabId,{
+			file:"/insert.css"
+		});
+	}
 }

@@ -10,5 +10,14 @@
   },
   "deletePage": {
     "message": "Usuń z czytelni"
+  },
+  "delete": {
+    "message": "Usuń"
+  },
+  "deleteTitle": {
+    "message": "Czy chcesz usunąć tę stronę z Czytelni?"
+  },
+  "close": {
+    "message": "Zamknij"
   }
 }

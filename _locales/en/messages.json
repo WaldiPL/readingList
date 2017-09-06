@@ -10,5 +10,14 @@
   },
   "deletePage": {
     "message": "Delete from Reading list"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "deleteTitle": {
+    "message": "Do you want to delete this web page from the Reading List?"
+  },
+  "close": {
+    "message": "Close"
   }
 }

@@ -1,0 +1,36 @@
+(function(){
+	const inserted=document.getElementById("readinglistToolbar");
+	if(!inserted){
+		let toolbar=document.createElement("x-toolbar"),
+			icon=document.createElement("x-icon"),
+			title=document.createElement("x-text"),
+			button=document.createElement("x-button"),
+			close=document.createElement("x-close");
+			closeX=document.createElement("x-closex");
+		toolbar.id="readinglistToolbar";
+		toolbar.className="hidden";
+		icon.id="readinglistIcon";
+		title.id="readinglistTitle";
+		button.id="readinglistButton";
+		close.id="readinglistClose";
+		close.addEventListener("click",e=>{
+			toolbar.className="hidden";
+		});
+		close.title=browser.i18n.getMessage("close");
+		closeX.id="readinglistCloseX";
+		title.textContent=browser.i18n.getMessage("deleteTitle");
+		button.textContent=browser.i18n.getMessage("delete");
+		button.addEventListener("click",e=>{
+			browser.runtime.sendMessage({fromContent:true});
+		});
+		toolbar.appendChild(icon);
+		toolbar.appendChild(title);
+		toolbar.appendChild(button);
+		close.appendChild(closeX);
+		toolbar.appendChild(close);
+		document.body.appendChild(toolbar);
+		setTimeout(()=>{
+			toolbar.removeAttribute("class");
+		},10000);
+	}
+})();

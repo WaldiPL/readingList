@@ -1,4 +1,4 @@
-# Reading List
+# Reading List ![](https://img.shields.io/badge/AMO-v.1.2.4-blue.svg)
 One-click save page for later, come back to it in free time.
 
 ## Screenshot
