@@ -1,10 +1,34 @@
+browser.runtime.onInstalled.addListener(handleInstalled);
+function handleInstalled(details){
+	if(details.reason==="install"){
+		browser.storage.local.get('pages').then(result=>{
+			if(result.pages===undefined){
+				browser.storage.local.set({pages:[],thumbs:[]});
+			}
+		});
+	}
+	if(details.reason==="install"||details.reason==="update"){
+		browser.storage.local.get('settings').then(result=>{
+			if(result.settings===undefined){
+				browser.storage.local.set({settings:{
+					"view":"normal",
+					"theme":"light",
+					"showNotification":true,
+					"notificationTime":7000,
+					"rapidDeleting":false,
+					"showNotificationBar":true
+				}});
+			}
+		});
+	}
+}
+
 var urlList=[];
 
 (function(){
 	browser.storage.local.get().then(result=>{
-		let pages = result.pages;
-		if(!pages)browser.storage.local.set({pages:[],thumbs:[]});
-		else{
+		let pages=result.pages;
+		if(pages){
 			pages.forEach(value=>{
 				urlList.push(value.url);
 			});
@@ -68,6 +92,18 @@ browser.browserAction.onClicked.addListener(tab=>{
 	}
 });
 
+browser.contextMenus.create({
+	title:		browser.i18n.getMessage("addAll"),
+	contexts:	["browser_action"],
+	onclick:	()=>{addAll();}
+});
+
+browser.contextMenus.create({
+	title:		browser.i18n.getMessage("options"),
+	contexts:	["browser_action"],
+	onclick:	()=>{browser.runtime.openOptionsPage();}
+});
+
 function remove(tab,il){
 	browser.storage.local.get().then(result=>{
 		let pages = result.pages;
@@ -84,24 +120,25 @@ function remove(tab,il){
 
 function save(tab,base64){
 	browser.storage.local.get().then(result=>{
-		let pages = result.pages;
-		let thumbs = result.thumbs;
-		let page={
-			url:     tab.url,
-			domain:  tab.url.split("/")[2],
-			title:   tab.title,
-			favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png",
-		};
+		let pages=result.pages,
+			thumbs=result.thumbs,
+			settings=result.settings,
+			page={
+				url:     tab.url,
+				domain:  tab.url.split("/")[2],
+				title:   tab.title,
+				favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png",
+			};
 		if(!page.domain)return;
 		let thumb={
 			base: base64
 		};
 		urlList.unshift(tab.url);
 		setIcon(tab.id,tab.url)
-		const len=pages.length;
 		pages.unshift(page);
 		thumbs.unshift(thumb);
 		browser.storage.local.set({pages:pages,thumbs:thumbs});
+		if(settings.showNotification)notify("single",settings.notificationTime,tab);
 	}).then(()=>{
 		browser.runtime.sendMessage({"refreshList":true});
 	});
@@ -122,23 +159,84 @@ function resize(src,callback){
 }
 
 function insert(tabId,del){
-	if(del){
-		browser.tabs.executeScript(
-			tabId,{
-			code:`(function(){
-				const toolbar=document.getElementById("readinglistToolbar");
-				toolbar.className="hidden";
-				setTimeout(()=>{toolbar.remove();},200);
-			})();`
+	browser.storage.local.get('settings').then(result=>{
+		let settings=result.settings;
+		if(settings.showNotificationBar){
+			if(del){
+				browser.tabs.executeScript(
+					tabId,{
+					code:`(function(){
+						const toolbar=document.getElementById("readinglistToolbar");
+						toolbar.className="hidden";
+						setTimeout(()=>{toolbar.remove();},200);
+					})();`
+				});
+			}else{
+				browser.tabs.executeScript(
+					tabId,{
+					file:"/insert.js"
+				});
+				browser.tabs.insertCSS(
+					tabId,{
+					file:"/insert.css"
+				});
+			}
+		}
+	});
+}
+
+let tempE;
+function addAll(){
+	browser.tabs.query({currentWindow: true}).then(e=>{
+		tempE=e;
+		browser.storage.local.get().then(result=>{
+			let pages=result.pages,
+				thumbs=result.thumbs,
+				settings=result.settings,
+				page;
+			tempE.forEach(tab=>{
+				if(onList(tab.url)<0){
+					page={
+						url:     tab.url,
+						domain:  tab.url.split("/")[2],
+						title:   tab.title,
+						favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png"
+					};
+					if(!page.domain)return;
+					let thumb={
+						base: "icons/thumb.svg"
+					};
+					urlList.unshift(tab.url);
+					setIcon(tab.id,tab.url)
+					pages.unshift(page);
+					thumbs.unshift(thumb);
+				}
+			});
+			browser.storage.local.set({pages:pages,thumbs:thumbs});
+			if(settings.showNotification)notify("all",settings.notificationTime);
+		}).then(()=>{
+			browser.runtime.sendMessage({"refreshList":true});
+		});
+	});
+}
+
+let clearNotify;
+function notify(mode,time,tab){
+	clearInterval(clearNotify);
+	if(mode==="single"){
+		browser.notifications.create("readingList",{
+			"type": "basic",
+			"iconUrl": tab.favIconUrl?tab.favIconUrl:"icons/fav.png",
+			"title": browser.i18n.getMessage("added"),
+			"message": tab.title
 		});
 	}else{
-		browser.tabs.executeScript(
-			tabId,{
-			file:"/insert.js"
-		});
-		browser.tabs.insertCSS(
-			tabId,{
-			file:"/insert.css"
+		browser.notifications.create("readingList",{
+			"type": "basic",
+			"iconUrl": "icons/icon.svg",
+			"title":browser.i18n.getMessage("extensionName"),
+			"message":browser.i18n.getMessage("addedAll")
 		});
 	}
+	clearNotify=setTimeout(()=>{browser.notifications.clear("readingList");},time);
 }

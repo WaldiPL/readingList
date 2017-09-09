@@ -11,6 +11,8 @@ One-click save page for later, come back to it in free time.
 - Tabs
 - Storage
 - <all_urls> (for thumbails)
+- Context menus
+- Notifications
 
 ## Download
 https://addons.mozilla.org/en-us/firefox/addon/readinglist/

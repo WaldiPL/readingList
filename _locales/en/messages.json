@@ -6,10 +6,13 @@
     "message": "One-click save page for later."
   },
   "extensionAction": {
-    "message": "Add to Reading list"
+    "message": "Add to Reading List"
+  },
+  "addAll": {
+    "message": "Add all tabs to the Reading List"
   },
   "deletePage": {
-    "message": "Delete from Reading list"
+    "message": "Delete from Reading List"
   },
   "delete": {
     "message": "Delete"
@@ -19,5 +22,47 @@
   },
   "close": {
     "message": "Close"
+  },
+  "options": {
+    "message": "Options"
+  },
+  "view": {
+    "message": "View"
+  },
+  "compact": {
+    "message": "Compact"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "theme": {
+    "message": "Theme"
+  },
+  "lightTheme": {
+    "message": "Light"
+  },
+  "darkTheme": {
+    "message": "Dark"
+  },
+  "showNotification": {
+    "message": "Show notification of added page"
+  },
+  "notificationTime": {
+    "message": "Notification display time"
+  },
+  "rapidDeleting": {
+    "message": "Rapid deleting"
+  },
+  "showNotificationBar": {
+    "message": "Show notification bar"
+  },
+  "backup": {
+    "message": "Create a backup"
+  },
+  "added": {
+    "message": "Added to the Reading List"
+  },
+  "addedAll": {
+    "message": "Added all tabs to the Reading List"
   }
 }

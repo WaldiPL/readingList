@@ -6,10 +6,13 @@
     "message": "Jednym kliknięciem zachowaj stronę na później."
   },
   "extensionAction": {
-    "message": "Dodaj do czytelni"
+    "message": "Dodaj do Czytelni"
+  },
+  "addAll": {
+    "message": "Dodaj wszystkie karty do Czytelni"
   },
   "deletePage": {
-    "message": "Usuń z czytelni"
+    "message": "Usuń z Czytelni"
   },
   "delete": {
     "message": "Usuń"
@@ -19,5 +22,47 @@
   },
   "close": {
     "message": "Zamknij"
+  },
+  "options": {
+    "message": "Opcje"
+  },
+  "view": {
+    "message": "Widok"
+  },
+  "compact": {
+    "message": "Zwarty"
+  },
+  "normal": {
+    "message": "Normalny"
+  },
+  "theme": {
+    "message": "Motyw"
+  },
+  "lightTheme": {
+    "message": "Jasny"
+  },
+  "darkTheme": {
+    "message": "Ciemny"
+  },
+  "showNotification": {
+    "message": "Pokazuj powiadomienie o dodanej stronie"
+  },
+  "notificationTime": {
+    "message": "Czas wyświetlania powiadomienia"
+  },
+  "rapidDeleting": {
+    "message": "Szybkie usuwanie"
+  },
+  "showNotificationBar": {
+    "message": "Pokazuj pasek powiadomień"
+  },
+  "backup": {
+    "message": "Utwórz kopię zapasową"
+  },
+  "added": {
+    "message": "Dodano do Czytelni"
+  },
+  "addedAll": {
+    "message": "Dodano wszystkie karty do Czytelni"
   }
 }

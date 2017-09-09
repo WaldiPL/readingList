@@ -1,7 +1,32 @@
+.light:root {
+	--background-color:#f5f6f7;
+	--background-hover:#dddedf;
+	--text-color:#0c0c0d;
+	--border-color:#ccc;
+	--domain-color:#0a84ff;
+	--thumb-color:#fff;
+	--delete-color:#d70022;
+	--delete-hover:#a4000f;
+	--delete-deleting:#f993ab;
+
+}
+
+.dark:root {
+	--background-color:#323234;
+	--background-hover:#5b5b5d;
+	--text-color:#f9f9fa;
+	--border-color:#0c0c0d;
+	--domain-color:#45a1ff;
+	--thumb-color:#fff;
+	--delete-color:#d70022;
+	--delete-hover:#ff0039;
+	--delete-deleting:#841e36;
+}
+
 body{
 	padding:0;
 	margin:0;
-	background:#fbfbfb;
+	background:var(--background-color);
 	overflow-x:hidden;
 	width:100%;
 	font-family: Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
@@ -9,25 +34,30 @@ body{
 
 .pages{
 	padding: 5px;
-	height:50px;
-	background: #fbfbfb;
+	background:var(--background-color);
 	font-size: 12px;
 	text-decoration: none;
-	border:1px solid transparent;
 	display: flex;
 	flex-flow: row;
 }
 
-.pages:hover, .pages.hover{
-	background:#e8e8e8;
-	border:1px solid #d0d0d0;
+.normal .pages{
+	height:50px;
 }
 
-a{
+.compact .pages{
+	height:22px;
+}
+
+.pages:hover, .pages.hover{
+	background:var(--background-hover);
+}
+
+.normal a{
 	display:inline-block;
 	font-size: 12px;
 	text-decoration: none;
-	color: #444;
+	color:var(--text-color);
 	height:50px;
 	display: flex;
 	flex-flow: row;
@@ -35,69 +65,103 @@ a{
 	max-width: 100%;
 }
 
-.thumb{
+.compact a{
+	display: inline-block;
+	font-size: 12px;
+	text-decoration: none;
+	color: var(--text-color);
+	max-width: 100%;
+}
+
+.normal .thumb{
 	display:block;
 	height:40px;
 	min-width:64px;
 	width:64px;
-	border:1px solid #c7c7c7;
+	border:1px solid var(--border-color);
 	margin:3px 10px 3px 3px;
 	padding:2px;
-	background:#fff;
+	background:var(--thumb-color);
 }
 
-.favicon{
-	background:#fbfbfb;
+.normal .favicon{
+	background:var(--thumb-color);
 	position: relative;
 	top: -25px;
 	left: 3px;
 	height:16px;
 	width:16px;
-	border:1px solid #c7c7c7;
+	border:1px solid var(--border-color);
 	padding:2px;
 }
 
-.box {
+.compact .favicon{
+	height:16px;
+	width:16px;
+	float: left;
+	margin: 2px 0 -2px 0;
+}
+
+.normal .box {
 	display: flex;
 	flex-flow: column;
 	overflow: hidden;
 }
 
-.title{
+.normal .title{
 	overflow: hidden;
 	max-height: 30px;
 	line-height: 15px;
 	overflow-wrap: break-word;
 }
 
-.url{
+.compact .title{
+	float: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-height: 16px;
+	line-height: 16px;
+	overflow-wrap: break-word;
+	padding: 0 0 0 5px;
+	margin: 2px 0 -2px 0;
+	width: calc(100% - 30px);
+}
+
+.normal .url{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-height:15px;
 	line-height: 15px;
-	color: #0095DD;
+	color:var(--domain-color);
 }
 
 .delete{
 	height:16px;
 	width:0;
 	float:right;
-	background:#d82016 url("icons/trash.svg") no-repeat center;
-	margin:-62px -33px 0 0;
-	padding:23px 0px;
+	background:var(--delete-color) url("icons/trash.svg") no-repeat center;
 	position:relative;
 }
 
+.normal .delete{
+	margin:-60px -33px 0 0;
+	padding:22px 8px;
+}
+
+.compact .delete{
+	margin:-32px -33px 0 0;
+	padding:8px;
+}
+
 .delete:hover{
-	background:#951400 url("icons/trash.svg") no-repeat center;
+	background:var(--delete-hover) url("icons/trash.svg") no-repeat center;
 }
 
 .pages:hover + .delete, .delete:hover{
 	display:block;
 	margin-right:0;
 	width:17px;
-	padding:23px 8px;
 	transition:margin-right 150ms 100ms ease-in-out;
 }
 
@@ -105,22 +169,27 @@ a{
 	opacity:.3;
 	height:0;
 	padding:0 5px;
-	border-width:0px;
 	transition:	opacity 200ms,
 				height 200ms 1800ms,
-				padding 200ms 1800ms,
-				border-width 200ms 1800ms;
+				padding 200ms 1800ms;
 }
 
 .delete.deleting{
 	display:block;
 	margin-right:0;
 	width:17px;
-	padding:23px 8px;
-	background:#f0b8b5 url("icons/undo.svg") no-repeat center;
+	background:var(--delete-deleting) url("icons/undo.svg") no-repeat center;
 	opacity:0;
 	transition:	background-color 200ms,
 				opacity 200ms 1700ms;
+}
+
+.normal .delete.deleting{
+	padding:22px 8px;
+}
+
+.compact .delete.deleting{
+	padding:8px;
 }
 
 .pages.deleting a{
@@ -130,8 +199,14 @@ a{
 				visibility 2000ms;
 }
 
-#readinglist.deleting .delete:not(.deleting){
+.normal #readinglist.deleting .delete:not(.deleting){
 	width:0 !important;
 	margin:-62px -33px 0 0 !important;
-	padding:23px 0px !important;
+	padding:23px 8px !important;
+}
+
+.compact #readinglist.deleting .delete:not(.deleting){
+	width:0 !important;
+	margin:-33px -33px 0 0 !important;
+	padding:8px !important;
 }

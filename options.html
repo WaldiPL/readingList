@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="options.css"/>
+	</head>
+	<body>
+		<form id="optionsForm">
+			<h2 id="h2options"></h2>
+			<table>
+				<tr>
+					<td>
+						<label id="labelView"></label>
+					</td>
+					<td>
+						<select id="view">
+							<option value="compact"></option>
+							<option value="normal"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label id="labelTheme"></label>
+					</td>
+					<td>
+						<select id="theme">
+							<option value="light"></option>
+							<option value="dark"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="checkbox" id="showNotification">
+						<label id="labelShowNotification" for="showNotification"></label>
+					</td>
+				</tr>
+				<tr id="trTime">
+					<td>
+						<label id="timeLabel"></label>
+					</td>
+					<td>
+						<input type="range" min="5000" max="20000" step="1000" id="notificationTime">
+						<output id="oTime" for="notificationTime"></output> s
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="checkbox" id="rapidDeleting">
+						<label id="labelRapidDeleting" for="rapidDeleting"></label>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="checkbox" id="showNotificationBar">
+						<label id="labelShowNotificationBar" for="showNotificationBar"></label>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="button" id="backup"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script src="options.js"></script>
+	</body>
+</html>
