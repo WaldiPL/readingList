@@ -56,6 +56,15 @@
   "showNotificationBar": {
     "message": "Show notification bar"
   },
+  "showSearchBar": {
+    "message": "Show search bar"
+  },
+  "addToContextMenu": {
+    "message": "Add item to context menu"
+  },
+  "iconTheme": {
+    "message": "Button icon theme"
+  },
   "backup": {
     "message": "Create a backup"
   },
@@ -64,5 +73,8 @@
   },
   "addedAll": {
     "message": "Added all tabs to the Reading List"
+  },
+  "searchPlaceholer": {
+    "message": "Search..."
   }
 }

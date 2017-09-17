@@ -56,6 +56,15 @@
   "showNotificationBar": {
     "message": "Pokazuj pasek powiadomień"
   },
+  "showSearchBar": {
+    "message": "Pokazuj pasek wyszukiwania"
+  },
+  "addToContextMenu": {
+    "message": "Dodaj element do menu kontekstowego"
+  },
+  "iconTheme": {
+    "message": "Motyw ikony przycisku"
+  },
   "backup": {
     "message": "Utwórz kopię zapasową"
   },
@@ -64,5 +73,8 @@
   },
   "addedAll": {
     "message": "Dodano wszystkie karty do Czytelni"
+  },
+  "searchPlaceholer": {
+    "message": "Szukaj..."
   }
 }

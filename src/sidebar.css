@@ -8,7 +8,8 @@
 	--delete-color:#d70022;
 	--delete-hover:#a4000f;
 	--delete-deleting:#f993ab;
-
+	--search-color:#fff;
+	--search-icon:url("icons/search.svg");
 }
 
 .dark:root {
@@ -21,6 +22,8 @@
 	--delete-color:#d70022;
 	--delete-hover:#ff0039;
 	--delete-deleting:#841e36;
+	--search-color:#474749;
+	--search-icon:url("icons/search.svg#d");
 }
 
 body{
@@ -209,4 +212,35 @@ body{
 	width:0 !important;
 	margin:-33px -33px 0 0 !important;
 	padding:8px !important;
+}
+
+.none{
+	display:none !important;
+}
+
+#searchbar{
+	width:100%;
+	position:fixed;
+	top:0;
+	z-index:1;
+	background:var(--background-color);
+}
+
+#search{
+	width:calc(100% - 6px);
+	color:var(--text-color);
+	background:var(--search-color) var(--search-icon) no-repeat 5px center;
+	border:1px solid var(--border-color);
+	border-radius:2px;
+	font-size: 13px;
+	padding: 5px 5px 5px 26px;
+	margin: 3px;
+}
+
+#search:focus{
+	border-color:#0078d7;
+}
+
+#searchbar:not(.none)+#readinglist{
+	padding-top:35px;
 }

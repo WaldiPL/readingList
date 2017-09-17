@@ -83,6 +83,7 @@
 	background-position:50%;
 	border-radius:2px;
 	display: block;
+	box-sizing: content-box;
 }
 
 #readinglistClose:hover #readinglistCloseX{

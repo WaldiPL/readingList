@@ -1,3 +1,7 @@
+let iconTheme,
+	urlList=[],
+	clearNotify;
+
 browser.runtime.onInstalled.addListener(handleInstalled);
 function handleInstalled(details){
 	if(details.reason==="install"){
@@ -16,23 +20,33 @@ function handleInstalled(details){
 					"showNotification":true,
 					"notificationTime":7000,
 					"rapidDeleting":false,
-					"showNotificationBar":true
+					"showNotificationBar":true,
+					"showSearchBar":true,
+					"addToContextMenu":true,
+					"iconTheme":"light"
 				}});
+			}else if(result.settings.showSearchBar===undefined){
+				result.settings=Object.assign(result.settings,{
+					"showSearchBar":true,
+					"addToContextMenu":true,
+					"iconTheme":"light"
+				});
+				browser.storage.local.set({settings:result.settings});
 			}
 		});
 	}
 }
 
-var urlList=[];
-
 (function(){
-	browser.storage.local.get().then(result=>{
+	browser.storage.local.get(["pages","settings"]).then(result=>{
 		let pages=result.pages;
 		if(pages){
 			pages.forEach(value=>{
 				urlList.push(value.url);
 			});
 		}
+		iconTheme=result.settings.iconTheme;
+		showContext(result.settings.addToContextMenu);
 	});
 })();
 
@@ -49,6 +63,10 @@ function run(m,s){
 		});
 	}else if(m.fromContent){
 		remove(s.tab,onList(s.url));
+	}else if(m.iconTheme){
+		iconTheme=m.iconTheme;
+	}else if(m.addToContextMenu!=undefined){
+		showContext(m.addToContextMenu);
 	}
 }
 
@@ -65,8 +83,9 @@ browser.tabs.onActivated.addListener(activeInfo=>{
 
 function setIcon(tabId,url){
 	const a=onList(url);
+	let icon=iconTheme==="light"?"btn2.svg":"btn.svg";
 	browser.browserAction.setIcon({
-		path:(a>=0)?"icons/btn.svg#d":"icons/btn.svg#a",
+		path:(a>=0)?`icons/${icon}#d`:`icons/${icon}#a`,
 		tabId: tabId
 	});
 	browser.browserAction.setTitle({
@@ -151,7 +170,7 @@ function resize(src,callback){
 		let ctx = canvas.getContext('2d');
 		canvas.width = 64;
 		canvas.height = 40;
-		ctx.drawImage(this, -48, 0, 160, 90);
+		ctx.drawImage(this, -30, 0, 190, 97);
 		let dataURL = canvas.toDataURL();
 		callback(dataURL);
 	};
@@ -220,7 +239,6 @@ function addAll(){
 	});
 }
 
-let clearNotify;
 function notify(mode,time,tab){
 	clearInterval(clearNotify);
 	if(mode==="single"){
@@ -239,4 +257,40 @@ function notify(mode,time,tab){
 		});
 	}
 	clearNotify=setTimeout(()=>{browser.notifications.clear("readingList");},time);
+}
+
+function showContext(e){
+	if(e){
+		browser.contextMenus.create({
+			id:			"addToReadingList",
+			title:		browser.i18n.getMessage("extensionAction"),
+			contexts:	["page","tab"],
+			onclick:	contextAdd
+		});
+	}else
+		browser.contextMenus.remove("addToReadingList");
+}
+
+function contextAdd(e){
+	browser.tabs.query({
+		url:e.pageUrl,
+		currentWindow:true
+	}).then(tabs=>{
+		const tab=tabs[0],
+			  il=onList(tab.url);
+		if(il>=0){
+			browser.storage.local.get("settings").then(result=>{
+				if(result.settings.showNotification)notify("single",result.settings.notificationTime,tab);
+			});
+		}else{
+			if(tab.active){
+				browser.tabs.captureVisibleTab().then(e=>{
+					resize(e,f=>{
+						save(tab,f);
+					});
+				});
+			}else
+				save(tab,"icons/thumb.svg");
+		}
+	});
 }

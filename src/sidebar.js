@@ -1,5 +1,7 @@
 (function(){
 	list();
+	document.getElementById("search").addEventListener("input",search);
+	document.getElementById("search").placeholder=browser.i18n.getMessage("searchPlaceholer");
 })();
 
 function list(){
@@ -11,6 +13,12 @@ function list(){
 			view=settings.view;
 		document.documentElement.className=settings.theme;
 		document.body.className=view;
+		if(settings.showSearchBar)
+			document.getElementById("searchbar").removeAttribute("class");
+		else{
+			document.getElementById("searchbar").className="none";
+			document.getElementById("search").value="";
+		}
 		container.className="";
 		container.textContent="";
 		pages.forEach((value,i)=>{
@@ -18,6 +26,12 @@ function list(){
 				ePages.className="pages";
 			let eA=document.createElement("a");
 				eA.href=value.url;
+				eA.addEventListener("click",e=>{
+					e.preventDefault();
+					browser.tabs.update({
+						url:value.url
+					});
+				});
 			let eBox=document.createElement("div");
 				eBox.className="box";
 			let eTitle=document.createElement("div");
@@ -54,6 +68,7 @@ function list(){
 			container.appendChild(ePages);
 			container.appendChild(eDelete);
 		});
+		search();
 	});
 }
 
@@ -94,4 +109,15 @@ function hover(id){
 browser.runtime.onMessage.addListener(run);
 function run(m){
 	if(m.refreshList)list();
+}
+
+function search(){
+	let q=document.getElementById("search").value.toLowerCase();
+	let p=document.getElementsByClassName("pages");
+	[...p].forEach(e=>{
+		if(e.getElementsByClassName("title")[0].textContent.toLowerCase().includes(q)||(document.body.classList.contains("normal")&&e.getElementsByClassName("url")[0].textContent.toLowerCase().includes(q)))
+			e.classList.remove("none");
+		else
+			e.classList.add("none");
+	});
 }
