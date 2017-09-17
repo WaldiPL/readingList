@@ -44,6 +44,12 @@
   "darkTheme": {
     "message": "Dark"
   },
+  "whiteTheme": {
+    "message": "White"
+  },
+  "blackTheme": {
+    "message": "Black"
+  },
   "showNotification": {
     "message": "Show notification of added page"
   },

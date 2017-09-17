@@ -83,9 +83,8 @@ browser.tabs.onActivated.addListener(activeInfo=>{
 
 function setIcon(tabId,url){
 	const a=onList(url);
-	let icon=iconTheme==="light"?"btn2.svg":"btn.svg";
 	browser.browserAction.setIcon({
-		path:(a>=0)?`icons/${icon}#d`:`icons/${icon}#a`,
+		path:(a>=0)?`icons/btn.svg#${iconTheme}D`:`icons/btn.svg#${iconTheme}`,
 		tabId: tabId
 	});
 	browser.browserAction.setTitle({

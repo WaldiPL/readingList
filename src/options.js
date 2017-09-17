@@ -82,6 +82,8 @@ function translate(){
 	let iconTheme=document.getElementById("iconTheme").options;
 		iconTheme[0].text=i18n("lightTheme");
 		iconTheme[1].text=i18n("darkTheme");
+		iconTheme[2].text=i18n("whiteTheme");
+		iconTheme[3].text=i18n("blackTheme");
 	document.getElementById("backup").value=i18n("backup");
 }
 

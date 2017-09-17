@@ -20,10 +20,10 @@
   }, 
   "browser_action": {
 	"default_title": "__MSG_extensionAction__",
-	"default_icon": "icons/btn.svg#a",
+	"default_icon": "icons/btn.svg#dark",
 	"theme_icons": [{
-		"light": "icons/btn2.svg#a",
-		"dark": "icons/btn.svg#a",
+		"light": "icons/btn.svg#light",
+		"dark": "icons/btn.svg#dark",
 		"size": 19
 	}]
   },
@@ -42,7 +42,7 @@
   "manifest_version": 2,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "icons": {
     "48": "icons/icon.svg"
   },

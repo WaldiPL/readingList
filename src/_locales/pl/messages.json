@@ -44,6 +44,12 @@
   "darkTheme": {
     "message": "Ciemny"
   },
+  "whiteTheme": {
+    "message": "Biały"
+  },
+  "blackTheme": {
+    "message": "Czarny"
+  },
   "showNotification": {
     "message": "Pokazuj powiadomienie o dodanej stronie"
   },
