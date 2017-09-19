@@ -23,13 +23,23 @@ function handleInstalled(details){
 					"showNotificationBar":true,
 					"showSearchBar":true,
 					"addToContextMenu":true,
-					"iconTheme":"light"
+					"iconTheme":"dark"
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
 					"showSearchBar":true,
 					"addToContextMenu":true,
-					"iconTheme":"light"
+					"iconTheme":"dark"
+				});
+				browser.storage.local.set({settings:result.settings});
+			}
+		});
+	}
+	if(details.reason==="update"){
+		browser.storage.local.get('settings').then(result=>{
+			if(result.settings.iconTheme==="light"){
+				result.settings=Object.assign(result.settings,{
+					"iconTheme":"dark"
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
