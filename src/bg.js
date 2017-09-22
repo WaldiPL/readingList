@@ -35,16 +35,6 @@ function handleInstalled(details){
 			}
 		});
 	}
-	if(details.reason==="update"){
-		browser.storage.local.get('settings').then(result=>{
-			if(result.settings.iconTheme==="light"){
-				result.settings=Object.assign(result.settings,{
-					"iconTheme":"dark"
-				});
-				browser.storage.local.set({settings:result.settings});
-			}
-		});
-	}
 }
 
 (function(){

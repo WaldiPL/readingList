@@ -82,5 +82,11 @@
   },
   "searchPlaceholer": {
     "message": "Search..."
+  },
+  "emptyH2": {
+    "message": "Reading List is empty."
+  },
+  "emptyList": {
+    "message": "You can add new items via a toolbar button or a context menu."
   }
 }

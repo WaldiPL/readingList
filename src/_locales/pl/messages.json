@@ -82,5 +82,11 @@
   },
   "searchPlaceholer": {
     "message": "Szukaj..."
+  },
+  "emptyH2": {
+    "message": "Czytelnia jest pusta."
+  },
+  "emptyList": {
+    "message": "Możesz dodać nowe elementy poprzez przycisk na pasku narzędzi lub menu kontekstowe."
   }
 }

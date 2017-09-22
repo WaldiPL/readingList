@@ -16,7 +16,7 @@
     "browser_style": false,
 	"default_title": "__MSG_extensionName__",
 	"default_panel": "sidebar.html",
-	"default_icon": "icons/icon_dark.svg"
+	"default_icon": "icons/icon2.svg#black"
   }, 
   "browser_action": {
 	"default_title": "__MSG_extensionAction__",
@@ -42,7 +42,7 @@
   "manifest_version": 2,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "icons": {
     "48": "icons/icon.svg"
   },

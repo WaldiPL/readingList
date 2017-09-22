@@ -21,53 +21,63 @@ function list(){
 		}
 		container.className="";
 		container.textContent="";
-		pages.forEach((value,i)=>{
-			let ePages=document.createElement("div");
-				ePages.className="pages";
-			let eA=document.createElement("a");
-				eA.href=value.url;
-				eA.addEventListener("click",e=>{
-					e.preventDefault();
-					browser.tabs.update({
-						url:value.url
+		if(!pages.length){
+			let emptyH2=document.createElement("h2");
+				emptyH2.textContent=browser.i18n.getMessage("emptyH2");
+			let emptyList=document.createElement("div");
+				emptyList.id="emptyList";
+				emptyList.textContent=browser.i18n.getMessage("emptyList");
+			emptyList.insertBefore(emptyH2,emptyList.firstChild);
+			container.appendChild(emptyList);
+		}else{
+			pages.forEach((value,i)=>{
+				let ePages=document.createElement("div");
+					ePages.className="pages";
+				let eA=document.createElement("a");
+					eA.href=value.url;
+					eA.addEventListener("click",e=>{
+						e.preventDefault();
+						browser.tabs.update({
+							url:value.url
+						});
 					});
-				});
-			let eBox=document.createElement("div");
-				eBox.className="box";
-			let eTitle=document.createElement("div");
-				eTitle.className="title";
-				eTitle.textContent=value.title;
-			let eDelete=document.createElement("div");
-				eDelete.className="delete";
-				eDelete.addEventListener("click",()=>{deleteLeter(i,settings.rapidDeleting);});
-				eDelete.addEventListener("mouseover",()=>{hover(i);});
-				eDelete.addEventListener("mouseout",()=>{hover(i);});
-			let eFavicon=document.createElement("img");
-				eFavicon.src=value.favicon;
-				eFavicon.className="favicon";
-			if(view==="normal"){
-				let eBoxThumb=document.createElement("div");
-					eBoxThumb.className="boxThumb";
-				let eThumb=document.createElement("img");
-					eThumb.className="thumb";
-					eThumb.src=thumbs[i].base;
-				let eUrl=document.createElement("div");
-					eUrl.className="url";
-					eUrl.textContent=value.domain;
-				eA.appendChild(eBoxThumb);
-				eBoxThumb.appendChild(eThumb);
-				eBoxThumb.appendChild(eFavicon);
-				eBox.appendChild(eTitle);
-				eBox.appendChild(eUrl);
-				eA.appendChild(eBox);
-			}else if(view==="compact"){
-				eA.appendChild(eFavicon);
-				eA.appendChild(eTitle);
-			}
-			ePages.appendChild(eA);
-			container.appendChild(ePages);
-			container.appendChild(eDelete);
-		});
+				let eBox=document.createElement("div");
+					eBox.className="box";
+				let eTitle=document.createElement("div");
+					eTitle.className="title";
+					eTitle.textContent=value.title;
+				let eDelete=document.createElement("div");
+					eDelete.className="delete";
+					eDelete.addEventListener("click",()=>{deleteLeter(i,settings.rapidDeleting);});
+					eDelete.addEventListener("mouseover",()=>{hover(i);});
+					eDelete.addEventListener("mouseout",()=>{hover(i);});
+				let eFavicon=document.createElement("img");
+					eFavicon.src=value.favicon;
+					eFavicon.className="favicon";
+				if(view==="normal"){
+					let eBoxThumb=document.createElement("div");
+						eBoxThumb.className="boxThumb";
+					let eThumb=document.createElement("img");
+						eThumb.className="thumb";
+						eThumb.src=thumbs[i].base;
+					let eUrl=document.createElement("div");
+						eUrl.className="url";
+						eUrl.textContent=value.domain;
+					eA.appendChild(eBoxThumb);
+					eBoxThumb.appendChild(eThumb);
+					eBoxThumb.appendChild(eFavicon);
+					eBox.appendChild(eTitle);
+					eBox.appendChild(eUrl);
+					eA.appendChild(eBox);
+				}else if(view==="compact"){
+					eA.appendChild(eFavicon);
+					eA.appendChild(eTitle);
+				}
+				ePages.appendChild(eA);
+				container.appendChild(ePages);
+				container.appendChild(eDelete);
+			});
+		}
 		search();
 	});
 }

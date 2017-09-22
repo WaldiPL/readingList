@@ -10,6 +10,8 @@
 	--delete-deleting:#f993ab;
 	--search-color:#fff;
 	--search-icon:url("icons/search.svg");
+	--empty-color:#737373;
+	--empty-icon:url("icons/icon2.svg#light");
 }
 
 .dark:root {
@@ -24,6 +26,8 @@
 	--delete-deleting:#841e36;
 	--search-color:#474749;
 	--search-icon:url("icons/search.svg#d");
+	--empty-color:#737373;
+	--empty-icon:url("icons/icon2.svg#dark");
 }
 
 body{
@@ -243,4 +247,18 @@ body{
 
 #searchbar:not(.none)+#readinglist{
 	padding-top:35px;
+}
+
+#emptyList h2{
+	margin:5px 0;
+}
+
+#emptyList{
+	background:var(--empty-icon) center bottom no-repeat;
+	background-size:100px;
+	width:calc(100% - 10px);
+	color: var(--empty-color);
+	font-size:13px;
+	text-align:center;
+	padding:30px 5px 110px;
 }
