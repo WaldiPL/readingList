@@ -36,10 +36,12 @@ function list(){
 				let eA=document.createElement("a");
 					eA.href=value.url;
 					eA.addEventListener("click",e=>{
-						e.preventDefault();
-						browser.tabs.update({
-							url:value.url
-						});
+						if(!e.ctrlKey){
+							e.preventDefault();
+							browser.tabs.update({
+								url:value.url
+							});
+						}
 					});
 				let eBox=document.createElement("div");
 					eBox.className="box";
