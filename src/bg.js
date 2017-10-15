@@ -34,6 +34,10 @@ function handleInstalled(details){
 				browser.storage.local.set({settings:result.settings});
 			}
 		});
+		browser.tabs.create({
+			url:"index.html#changelog",
+			active:true
+		});
 	}
 }
 
