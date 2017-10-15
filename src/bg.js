@@ -122,6 +122,20 @@ browser.contextMenus.create({
 	onclick:	()=>{browser.runtime.openOptionsPage();}
 });
 
+browser.runtime.getBrowserInfo().then(e=>{
+	let version=+e.version.substr(0,2);
+	if(version>=57){
+		browser.contextMenus.create({
+			id:			"showRL",
+			title:		browser.i18n.getMessage("showRL"),
+			contexts:	["browser_action"],
+		});
+		browser.contextMenus.onClicked.addListener(info=>{
+			if(info.menuItemId==="showRL")browser.sidebarAction.open();
+		});
+	}
+});
+
 function remove(tab,il){
 	browser.storage.local.get().then(result=>{
 		let pages = result.pages;

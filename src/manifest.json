@@ -47,7 +47,8 @@
     "48": "icons/icon.svg"
   },
   "options_ui": {
-    "browser_style": true,
-    "page": "options.html"
+    "browser_style": false,
+    "page": "/index.html",
+	"open_in_tab": true
   }
 }

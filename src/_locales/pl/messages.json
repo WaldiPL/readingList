@@ -51,7 +51,7 @@
     "message": "Czarny"
   },
   "showNotification": {
-    "message": "Pokazuj powiadomienie o dodanej stronie"
+    "message": "Pokaż powiadomienie o dodaniu strony"
   },
   "notificationTime": {
     "message": "Czas wyświetlania powiadomienia"
@@ -60,10 +60,10 @@
     "message": "Szybkie usuwanie"
   },
   "showNotificationBar": {
-    "message": "Pokazuj pasek powiadomień"
+    "message": "Pokaż pasek powiadomień"
   },
   "showSearchBar": {
-    "message": "Pokazuj pasek wyszukiwania"
+    "message": "Pokaż pasek wyszukiwania"
   },
   "addToContextMenu": {
     "message": "Dodaj element do menu kontekstowego"
@@ -88,5 +88,50 @@
   },
   "emptyList": {
     "message": "Możesz dodać nowe elementy poprzez przycisk na pasku narzędzi lub menu kontekstowe."
+  },
+  "showRL": {
+    "message": "Pokaż Czytelnię"
+  },
+  "version": {
+    "message": "Wersja $1"
+  },
+  "changelog": {
+    "message": "Historia zmian"
+  },
+  "support": {
+    "message": "Wsparcie"
+  },
+  "general": {
+    "message": "Ogólne"
+  },
+  "sidebar": {
+    "message": "Panel boczny"
+  },
+  "h3backup": {
+    "message": "Kopia zapasowa"
+  },
+  "bugReport": {
+    "message": "Zgłoś błąd"
+  },
+  "spanBugReport": {
+    "message": "Znalazłeś błąd, a może masz pomysł jak ulepszyć rozszerzenie, załóź nowy wątek na"
+  },
+  "translation": {
+    "message": "Tłumaczenie"
+  },
+  "spanTranslation1": {
+    "message": "Chcesz aby rozszerzenie było dostępne w twoim ojczystym języku, przetłumacz"
+  },
+  "spanTranslation2": {
+    "message": "ten plik"
+  },
+  "spanTranslation3": {
+    "message": "i dodaj go w nowym wątku na"
+  },
+  "share": {
+    "message": "Podziel się"
+  },
+  "spanShare": {
+    "message": "Lubisz to rozszerzenie? Podziel się nim lub pozostaw opinię, aby dotarło do jak największej liczby osób."
   }
 }

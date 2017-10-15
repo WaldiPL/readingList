@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	<link rel="icon" type="image/svg-xml" href="icons/icon.svg">
+    <link rel="stylesheet" href="index.css"/>
+  </head>
+<body>
+	<nav>
+		<a id="optionsA" href="#options"></a>
+		<a id="changelogA" href="#changelog"></a>
+		<a id="supportA" href="#support"></a>
+	</nav>
+	<section id="options">
+		<h2 id="h2options"></h2>
+		<form id="optionsForm">
+			<h3 id="h3general"></h3>
+			<div class="row">
+				<input type="checkbox" id="showNotification"><label id="labelShowNotification" for="showNotification"><span></span></label>
+			</div>
+			<div class="row" id="trTime">
+				<label id="timeLabel"></label
+				><input type="range" min="5000" max="20000" step="1000" id="notificationTime"
+				><output id="oTime" for="notificationTime"></output> s
+			</div>
+
+			<div class="row">
+				<input type="checkbox" id="showNotificationBar"><label id="labelShowNotificationBar" for="showNotificationBar"></label>
+			</div>
+
+			<div class="row">
+				<input type="checkbox" id="addToContextMenu"><label id="labelAddToContextMenu" for="addToContextMenu"></label>
+			</div>
+			<div class="row">
+				<label id="labelIconTheme"></label
+				><select id="iconTheme">
+					<option value="light"></option>
+					<option value="dark"></option>
+					<option value="white"></option>
+					<option value="black"></option>
+				</select>
+			</div>
+			<h3 id="h3sidebar"></h3>
+			<div class="row">
+				<input type="checkbox" id="showSearchBar"><label id="labelShowSearchBar" for="showSearchBar"></label>
+			</div>
+			<div class="row">
+				<input type="checkbox" id="rapidDeleting"><label id="labelRapidDeleting" for="rapidDeleting"></label>
+			</div>
+			<div class="row">
+				<label id="labelView"></label
+				><select id="view">
+					<option value="compact"></option>
+					<option value="normal"></option>
+				</select>
+			</div>
+			<div class="row">
+				<label id="labelTheme"></label
+				><select id="theme">
+					<option value="light"></option>
+					<option value="dark"></option>
+				</select>
+			</div>
+			<h3 id="h3backup"></h3>
+			<div class="row">
+				<button id="backup"></button>
+			</div>
+		</form>
+	</section>
+	<section id="changelog">
+		<h2 id="h2changelog"></h2>
+	</section>
+	<section id="support">
+		<h2 id="h2support"></h2>
+		<article>
+			<h3 id="h3bugReport"></h3>
+			<p><span id="spanBugReport"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank">GitHub</a>.</p>
+		</article>
+		<article>
+			<h3 id="h3translation"></h3>
+			<p><span id="spanTranslation1"></span> <a href="_locales/en/messages.json" target="_blank"><span id="spanTranslation2"></span></a> <span id="spanTranslation3"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank">GitHub</a>.</p>
+		</article>
+		<article>
+			<h3 id="h3share"></h3>
+			<p><span id="spanShare"></span></p>
+			<a class="share" id="twitter" href="https://twitter.com/home?status=Save%20a%20web%20page%20for%20later%20with%20%23ReadingList%20for%20%23Firefox.%20%23WebExtension%0Ahttps%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-twitter" target="_blank">Twitter</a
+			><a class="share" id="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-facebook" target="_blank">Facebook</a
+			><a class="share" id="googleplus" href="https://plus.google.com/share?url=https%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-googleplus" target="_blank">Google+</a
+			><a class="share" id="amo" href="https://addons.mozilla.org/pl/firefox/addon/readinglist/" target="_blank">addons.mozilla.org</a>
+		</article>
+	</section>
+	<script src="changelog.js"></script>
+	<script src="index.js"></script>
+</body>
+</html>
