@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.3.3",
+		"changes":["Changed shortcut for macOS (Alt+R)","Minor changes"],
+		"changesPL":["Zmieniono skrót klawiaturowy dla macOS (Alt+R)","Drobne zmiany"]
+	},
 	{"version":"1.3.0",
 		"changes":["Reorganized options","Added 'Changelog' and 'Support'","Fixed bug #8","Minor changes"],
 		"changesPL":["Przeorganizowano opcje","Dodano 'Historię zmian' oraz 'Wsparcie'","Naprawiono błąd #8","Drobne zmiany"]
