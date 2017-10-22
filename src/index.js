@@ -15,6 +15,8 @@
 	document.getElementById("addToContextMenu").addEventListener("change",e=>{browser.runtime.sendMessage({"addToContextMenu":e.target.checked});});
 	document.getElementById("backup").addEventListener("click",createBackup);
 	window.addEventListener("hashchange",e=>{changeActive(e.newURL.split("#")[1]);});
+	document.getElementById("file").addEventListener("change",handleFileSelect);
+	document.getElementById("restore").addEventListener("click",restoreBackup);
 })();
 
 function saveOptions(){
@@ -63,7 +65,7 @@ function createBackup(){
 			d=new Date(),
 			date=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 		a.href=url;
-		a.download=`${i18n("extensionName")} - ${date}.js`;
+		a.download=`${i18n("extensionName")} - ${date}.json`;
 		a.style.display="none";
 		a.click();
 		window.URL.revokeObjectURL(url);
@@ -110,6 +112,12 @@ function translate(){
 	document.getElementById("spanTranslation3").textContent=i18n("spanTranslation3");
 	document.getElementById("h3share").textContent=i18n("share");
 	document.getElementById("spanShare").textContent=i18n("spanShare");
+	document.getElementById("fileText").textContent=i18n("restoreBackup");
+	document.getElementById("restoreAlertH4").textContent=i18n("restoreAlertH4");
+	document.getElementById("restoreAlertP").textContent=i18n("restoreAlertP");
+	document.getElementById("restore").textContent=i18n("restoreButton");
+	document.getElementById("restoreError").textContent=i18n("restoreError");
+	document.getElementById("restoreOk").textContent=i18n("restoreOk");
 }
 
 function i18n(e,s1){
@@ -121,4 +129,41 @@ function changeActive(e){
 	document.getElementById("changelogA").removeAttribute("class");
 	document.getElementById("supportA").removeAttribute("class");
 	document.getElementById(e+"A").className="active";
+}
+
+let uploaded;
+
+function handleFileSelect(e){
+	let file=e.target.files[0];
+	if(file.type==="application/json"||file.type==="application/x-javascript"){
+		let reader=new FileReader();
+		reader.onload=function(event){
+			try{
+				uploaded=JSON.parse(event.target.result);
+				document.getElementById("restoreError").className="none";
+				document.getElementById("restoreAlert").removeAttribute("class");
+			}catch(e){
+				document.getElementById("restoreAlert").className="none";
+				document.getElementById("restoreError").removeAttribute("class");
+			}
+			document.getElementById("restoreOk").className="none";
+		};
+		reader.onerror=function(event){
+			document.getElementById("restoreAlert").className="none";
+			document.getElementById("restoreOk").className="none";
+			document.getElementById("restoreError").removeAttribute("class");
+		}
+		reader.readAsText(file);
+	}
+}
+
+function restoreBackup(){
+	browser.storage.local.set({pages:uploaded.pages,thumbs:uploaded.thumbs}).then(()=>{
+		document.getElementById("restoreAlert").className="none";
+		document.getElementById("restoreOk").removeAttribute("class");
+		browser.runtime.sendMessage({"refreshList":true});
+	},()=>{
+		document.getElementById("restoreAlert").className="none";
+		document.getElementById("restoreError").removeAttribute("class");
+	});
 }

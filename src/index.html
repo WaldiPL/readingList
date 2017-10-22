@@ -63,8 +63,19 @@
 			</div>
 			<h3 id="h3backup"></h3>
 			<div class="row">
-				<button id="backup"></button>
+				<button id="backup"></button
+				><span id="fileInput"
+					><input type="file" id="file" accept=".json,.js"/
+					><span id="fileText"></span>
+				</span>
 			</div>
+			<div id="restoreAlert" class="none">
+				<h4 id="restoreAlertH4"></h4>
+				<p id="restoreAlertP"></p>
+				<button id="restore"></button>
+			</div>
+			<h4 id="restoreError" class="none"></h4>
+			<h4 id="restoreOk" class="none"></h4>
 		</form>
 	</section>
 	<section id="changelog">

@@ -135,13 +135,15 @@ button{
 	border: 1px solid #d7d7db;
 	border-radius: 2px;
 	background-color:#f9f9fa;
+	font-family:Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
+	font-size:13px;
 }
 
-button:hover,select:hover{
+button:hover,select:hover,#fileInput:hover{
 	background-color:#ebebeb;
 }
 
-button:active,select:active{
+button:active,select:active,#fileInput:active{
 	background-color:#dadada;
 }
 
@@ -160,6 +162,7 @@ label{
 
 select {
 	margin: 0 8px;
+	font-family:Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
 	font-size:13px;
 	padding:4px 10px;
 	-moz-appearance: none;
@@ -228,4 +231,54 @@ article:hover{
 
 #amo{
 	background-color:#57BD35;
+}
+
+#fileInput{
+	height:28px;
+	margin:0 8px;
+	display:inline-block;
+	border:1px solid #d7d7db;
+	border-radius:2px;
+	background-color:#f9f9fa;
+	font-size:13px;
+	cursor:context-menu;
+	overflow:hidden;
+	vertical-align:top;
+}
+
+#fileText{
+	padding:0 20px;
+}
+
+#file{
+	height:28px;
+	width:200px;
+	background:red;
+	opacity:0;
+	margin-right:-200px;
+}
+
+.none{
+	display:none !important;
+}
+
+#restoreAlert,#restoreError,#restoreOk{
+	padding:10px;
+	margin:8px 0;
+}
+
+#restoreAlert{
+	background:#ffe90080;
+}
+
+#restoreAlert h4{
+	margin:0;
+}
+
+#restoreError{
+	background:#ff003980;
+}
+
+#restoreOk{
+	background:#12bc0080;
 }

@@ -133,5 +133,23 @@
   },
   "spanShare": {
     "message": "Do you like this extension? Share it or write a review to reach as many people as possible."
+  },
+  "restoreBackup": {
+    "message": "Restore backup"
+  },
+  "restoreAlertH4": {
+    "message": "Are you sure you want to restore the selected backup?"
+  },
+  "restoreAlertP": {
+    "message": "This operation can not be undone. All current data will be deleted. If you select the wrong or corrupted file, the extension will not work properly."
+  },
+  "restoreButton": {
+    "message": "Restore"
+  },
+  "restoreError": {
+    "message": "A problem occured. Please try again."
+  },
+  "restoreOk": {
+    "message": "The backup has been restored."
   }
 }

@@ -133,5 +133,23 @@
   },
   "spanShare": {
     "message": "Lubisz to rozszerzenie? Podziel się nim lub pozostaw opinię, aby dotarło do jak największej liczby osób."
+  },
+  "restoreBackup": {
+    "message": "Przywróć kopię zapasową"
+  },
+  "restoreAlertH4": {
+    "message": "Czy na pewno chcesz przywrócić wybraną kopię zapasową?"
+  },
+  "restoreAlertP": {
+    "message": "Tej operacji nie można cofnąć. Wszystkie obecne dane zostaną usunięte. Jeśli wybrano niewłaściwy lub uszkodzony plik rozszerzenie nie będzie działało poprawnie."
+  },
+  "restoreButton": {
+    "message": "Przywróć"
+  },
+  "restoreError": {
+    "message": "Wystąpił problem. Proszę spróbować ponownie."
+  },
+  "restoreOk": {
+    "message": "Kopia zapasowa została przywrócona."
   }
 }

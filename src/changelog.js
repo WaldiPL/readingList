@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.3.4",
+		"changes":["Added ability to restore a backup #11"],
+		"changesPL":["Dodano możliwość przywrócenia kopii zapasowej #11"]
+	},
 	{"version":"1.3.3",
 		"changes":["Changed shortcut for macOS (Alt+R)","Minor changes"],
 		"changesPL":["Zmieniono skrót klawiaturowy dla macOS (Alt+R)","Drobne zmiany"]
