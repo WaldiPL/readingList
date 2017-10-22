@@ -40,7 +40,6 @@ body{
 }
 
 .pages{
-	padding: 5px;
 	background:var(--background-color);
 	font-size: 12px;
 	text-decoration: none;
@@ -50,10 +49,12 @@ body{
 
 .normal .pages{
 	height:50px;
+	padding: 5px;
 }
 
 .compact .pages{
 	height:22px;
+	padding: 5px 0 5px 5px;
 }
 
 .pages:hover, .pages.hover{
@@ -77,7 +78,7 @@ body{
 	font-size: 12px;
 	text-decoration: none;
 	color: var(--text-color);
-	max-width: 100%;
+	width:100%;
 }
 
 .normal .thumb{
@@ -131,7 +132,8 @@ body{
 	overflow-wrap: break-word;
 	padding: 0 0 0 5px;
 	margin: 2px 0 -2px 0;
-	width: calc(100% - 30px);
+	width: calc(100% - 22px);
+	overflow:hidden;
 }
 
 .normal .url{
