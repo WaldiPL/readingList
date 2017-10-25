@@ -1,4 +1,4 @@
-# Reading List ![](https://img.shields.io/badge/AMO-v.1.2.8-blue.svg)
+# Reading List ![](https://img.shields.io/badge/AMO-v.1.3.5-blue.svg)
 One-click save page for later, come back to it in free time.
 
 ## Screenshot
@@ -15,4 +15,4 @@ One-click save page for later, come back to it in free time.
 - Notifications
 
 ## Download
-https://addons.mozilla.org/en-us/firefox/addon/readinglist/
+https://addons.mozilla.org/firefox/addon/readinglist?src=external-github
