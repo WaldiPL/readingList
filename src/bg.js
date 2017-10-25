@@ -1,3 +1,4 @@
+init();
 let iconTheme,
 	urlList=[],
 	clearNotify;
@@ -53,18 +54,21 @@ function handleInstalled(details){
 	}
 }
 
-(function(){
+function init(){
 	browser.storage.local.get(["pages","settings"]).then(result=>{
-		let pages=result.pages;
-		if(pages){
-			pages.forEach(value=>{
-				urlList.push(value.url);
-			});
-		}
-		iconTheme=result.settings.iconTheme;
-		showContext(result.settings.addToContextMenu);
+		if(result.settings){
+			let pages=result.pages;
+			if(pages){
+				pages.forEach(value=>{
+					urlList.push(value.url);
+				});
+			}
+			iconTheme=result.settings.iconTheme;
+			showContext(result.settings.addToContextMenu);
+		}else
+			setTimeout(init,100);
 	});
-})();
+}
 
 browser.runtime.onMessage.addListener(run);
 function run(m,s){

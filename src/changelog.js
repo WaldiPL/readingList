@@ -1,7 +1,7 @@
 let changelog=`[
-	{"version":"1.3.5",
-		"changes":["Added ability to sort","Minor changes"],
-		"changesPL":["Dodano możliwość sortowania","Drobne zmiany"]
+	{"version":"1.3.6",
+		"changes":["Added ability to sort","Minor changes","Fixed bug"],
+		"changesPL":["Dodano możliwość sortowania","Drobne zmiany","Naprawiono błąd"]
 	},
 	{"version":"1.3.4",
 		"changes":["Added ability to restore a backup #11"],
