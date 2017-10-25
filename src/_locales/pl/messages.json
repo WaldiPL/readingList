@@ -151,5 +151,23 @@
   },
   "restoreOk": {
     "message": "Kopia zapasowa została przywrócona."
+  },
+  "showSort": {
+    "message": "Pokaż przycisk sortowania"
+  },
+  "sort": {
+    "message": "Sortuj"
+  },
+  "descDate": {
+    "message": "od najnowszych"
+  },
+  "ascDate": {
+    "message": "od najstarszych"
+  },
+  "az": {
+    "message": "od A do Z"
+  },
+  "za": {
+    "message": "od Z do A"
   }
 }

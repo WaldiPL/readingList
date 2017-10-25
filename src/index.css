@@ -151,6 +151,10 @@ button:active,select:active,#fileInput:active{
 	padding:5px 0;
 }
 
+.sub{
+	padding:5px 0 5px 25px;
+}
+
 .false{
 	opacity:.4;
 }
@@ -164,7 +168,7 @@ select {
 	margin: 0 8px;
 	font-family:Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
 	font-size:13px;
-	padding:4px 10px;
+	padding:4px 20px 4px 10px;
 	-moz-appearance: none;
 	min-height: 30px;
 	min-width: 100px;

@@ -151,5 +151,23 @@
   },
   "restoreOk": {
     "message": "The backup has been restored."
+  },
+  "showSort": {
+    "message": "Show sort button"
+  },
+  "sort": {
+    "message": "Sort"
+  },
+  "descDate": {
+    "message": "by newest"
+  },
+  "ascDate": {
+    "message": "by oldest"
+  },
+  "az": {
+    "message": "from A to Z"
+  },
+  "za": {
+    "message": "from Z to A"
   }
 }

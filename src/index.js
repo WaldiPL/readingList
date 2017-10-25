@@ -17,6 +17,11 @@
 	window.addEventListener("hashchange",e=>{changeActive(e.newURL.split("#")[1]);});
 	document.getElementById("file").addEventListener("change",handleFileSelect);
 	document.getElementById("restore").addEventListener("click",restoreBackup);
+	document.getElementById("showSearchBar").addEventListener("change",e=>{
+		let checked=e.target.checked;
+		document.getElementById("sortSub").className="sub "+checked;
+		document.getElementById("showSort").disabled=!checked;
+	});
 })();
 
 function saveOptions(){
@@ -29,7 +34,9 @@ function saveOptions(){
 		showNotificationBar:document.getElementById("showNotificationBar").checked,
 		showSearchBar:		document.getElementById("showSearchBar").checked,
 		addToContextMenu:	document.getElementById("addToContextMenu").checked,
-		iconTheme:			document.getElementById("iconTheme").value
+		iconTheme:			document.getElementById("iconTheme").value,
+		showSort:			document.getElementById("showSort").checked,
+		sort:				document.getElementById("sort").value
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
@@ -52,6 +59,12 @@ function restoreOptions(){
 		document.getElementById("showSearchBar").checked=s.showSearchBar;
 		document.getElementById("addToContextMenu").checked=s.addToContextMenu;
 		document.getElementById("iconTheme").value=s.iconTheme;
+		document.getElementById("showSort").checked=s.showSort;
+		document.getElementById("sort").value=s.sort;
+		if(!s.showSearchBar){
+			document.getElementById("sortSub").className="sub false";
+			document.getElementById("showSort").disabled=true;
+		}
 	});
 }
 
@@ -118,6 +131,13 @@ function translate(){
 	document.getElementById("restore").textContent=i18n("restoreButton");
 	document.getElementById("restoreError").textContent=i18n("restoreError");
 	document.getElementById("restoreOk").textContent=i18n("restoreOk");
+	document.getElementById("labelShowSort").textContent=i18n("showSort");
+	document.getElementById("labelSort").textContent=i18n("sort");
+	let sort=document.getElementById("sort").options;
+		sort[0].text=i18n("descDate");
+		sort[1].text=i18n("ascDate");
+		sort[2].text=i18n("az");
+		sort[3].text=i18n("za");
 }
 
 function i18n(e,s1){

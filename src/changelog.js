@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.3.5",
+		"changes":["Added ability to sort","Minor changes"],
+		"changesPL":["Dodano możliwość sortowania","Drobne zmiany"]
+	},
 	{"version":"1.3.4",
 		"changes":["Added ability to restore a backup #11"],
 		"changesPL":["Dodano możliwość przywrócenia kopii zapasowej #11"]

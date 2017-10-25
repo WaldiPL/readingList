@@ -23,13 +23,23 @@ function handleInstalled(details){
 					"showNotificationBar":true,
 					"showSearchBar":true,
 					"addToContextMenu":true,
-					"iconTheme":"dark"
+					"iconTheme":"dark",
+					"showSort":true,
+					"sort":"descDate"
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
 					"showSearchBar":true,
 					"addToContextMenu":true,
-					"iconTheme":"dark"
+					"iconTheme":"dark",
+					"showSort":true,
+					"sort":"descDate"
+				});
+				browser.storage.local.set({settings:result.settings});
+			}else if(result.settings.showSort===undefined){
+				result.settings=Object.assign(result.settings,{
+					"showSort":true,
+					"sort":"descDate"
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
