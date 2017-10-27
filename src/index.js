@@ -36,7 +36,8 @@ function saveOptions(){
 		addToContextMenu:	document.getElementById("addToContextMenu").checked,
 		iconTheme:			document.getElementById("iconTheme").value,
 		showSort:			document.getElementById("showSort").checked,
-		sort:				document.getElementById("sort").value
+		sort:				document.getElementById("sort").value,
+		changelog:			document.getElementById("openChangelog").checked
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
@@ -65,6 +66,7 @@ function restoreOptions(){
 			document.getElementById("sortSub").className="sub false";
 			document.getElementById("showSort").disabled=true;
 		}
+		document.getElementById("openChangelog").checked=s.changelog!==false?true:false;
 	});
 }
 
@@ -138,6 +140,7 @@ function translate(){
 		sort[1].text=i18n("ascDate");
 		sort[2].text=i18n("az");
 		sort[3].text=i18n("za");
+	document.getElementById("labelOpenChangelog").textContent=i18n("openChangelog");
 }
 
 function i18n(e,s1){

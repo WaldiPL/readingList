@@ -169,5 +169,8 @@
   },
   "za": {
     "message": "from Z to A"
+  },
+  "openChangelog": {
+    "message": "Open the 'Changelog' page after update."
   }
 }

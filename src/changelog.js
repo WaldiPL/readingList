@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.3.7",
+		"changes":["Fixed bugs","Added option to disable the 'Changelog' page after update"],
+		"changesPL":["Naprawiono błędy","Dodano opcję wyłączenie strony 'Historia zmian' po aktualizacji"]
+	},
 	{"version":"1.3.6",
 		"changes":["Added ability to sort","Minor changes","Fixed bug"],
 		"changesPL":["Dodano możliwość sortowania","Drobne zmiany","Naprawiono błąd"]

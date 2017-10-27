@@ -26,6 +26,8 @@ nav{
 	grid-area:nav;
 	padding-top:70px;
 	position:fixed;
+	background-color:#f9f9fa;
+	height:100%;
 }
 
 #optionsA{
@@ -149,10 +151,12 @@ button:active,select:active,#fileInput:active{
 
 .row{
 	padding:5px 0;
+	white-space:nowrap;
 }
 
 .sub{
 	padding:5px 0 5px 25px;
+	white-space:nowrap;
 }
 
 .false{
@@ -285,4 +289,13 @@ article:hover{
 
 #restoreOk{
 	background:#12bc0080;
+}
+
+section a{
+	color:#0060df;
+	text-decoration:none;
+}
+
+section a:hover{
+	text-decoration:underline;
 }

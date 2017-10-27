@@ -1,7 +1,8 @@
 init();
 let iconTheme,
 	urlList=[],
-	clearNotify;
+	clearNotify,
+	iconChanged;
 
 browser.runtime.onInstalled.addListener(handleInstalled);
 function handleInstalled(details){
@@ -26,7 +27,8 @@ function handleInstalled(details){
 					"addToContextMenu":true,
 					"iconTheme":"dark",
 					"showSort":true,
-					"sort":"descDate"
+					"sort":"descDate",
+					"changelog":true
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
@@ -34,18 +36,20 @@ function handleInstalled(details){
 					"addToContextMenu":true,
 					"iconTheme":"dark",
 					"showSort":true,
-					"sort":"descDate"
+					"sort":"descDate",
+					"changelog":true
 				});
 				browser.storage.local.set({settings:result.settings});
 			}else if(result.settings.showSort===undefined){
 				result.settings=Object.assign(result.settings,{
 					"showSort":true,
-					"sort":"descDate"
+					"sort":"descDate",
+					"changelog":true
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
 		});
-		if(!details.temporary){
+		if(!details.temporary&&result.settings.changelog!==false){
 			browser.tabs.create({
 				url:"index.html#changelog",
 				active:true
@@ -57,13 +61,16 @@ function handleInstalled(details){
 function init(){
 	browser.storage.local.get(["pages","settings"]).then(result=>{
 		if(result.settings){
+			iconTheme=result.settings.iconTheme;
+			browser.browserAction.setIcon({
+				path:`icons/btn.svg#${iconTheme}`
+			}).then(()=>{iconChanged=true;});
 			let pages=result.pages;
 			if(pages){
 				pages.forEach(value=>{
 					urlList.push(value.url);
 				});
 			}
-			iconTheme=result.settings.iconTheme;
 			showContext(result.settings.addToContextMenu);
 		}else
 			setTimeout(init,100);
@@ -85,6 +92,14 @@ function run(m,s){
 		remove(s.tab,onList(s.url));
 	}else if(m.iconTheme){
 		iconTheme=m.iconTheme;
+		browser.browserAction.setIcon({
+			path:`icons/btn.svg#${iconTheme}`
+		}).then(()=>{
+			browser.browserAction.setIcon({
+				path:`icons/btn.svg#${iconTheme}`,
+				tabId:s.tab.id
+			});
+		});
 	}else if(m.addToContextMenu!=undefined){
 		showContext(m.addToContextMenu);
 	}
@@ -102,15 +117,18 @@ browser.tabs.onActivated.addListener(activeInfo=>{
 });
 
 function setIcon(tabId,url){
-	const a=onList(url);
-	browser.browserAction.setIcon({
-		path:(a>=0)?`icons/btn.svg#${iconTheme}D`:`icons/btn.svg#${iconTheme}`,
-		tabId: tabId
-	});
-	browser.browserAction.setTitle({
-		title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction")
-	});
-	a>=0?insert(tabId,false):insert(tabId,true);
+	if(iconTheme&&iconChanged){
+		const a=onList(url);
+		browser.browserAction.setIcon({
+			path:(a>=0)?`icons/btn.svg#${iconTheme}D`:`icons/btn.svg#${iconTheme}`,
+			tabId: tabId
+		});
+		browser.browserAction.setTitle({
+			title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction")
+		});
+		a>=0?insert(tabId,false):insert(tabId,true);
+	}else
+		setTimeout(()=>{setIcon(tabId,url)},200);
 }
 
 function onList(url){

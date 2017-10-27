@@ -169,5 +169,8 @@
   },
   "za": {
     "message": "od Z do A"
+  },
+  "openChangelog": {
+    "message": "Otwórz stronę z 'Historią zmian' po aktualizacji"
   }
 }
