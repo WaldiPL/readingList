@@ -10,7 +10,8 @@
 	  "storage",
 	  "<all_urls>",
 	  "contextMenus",
-	  "notifications"
+	  "notifications",
+	  "bookmarks"
   ],
   "sidebar_action": {
     "browser_style": false,
@@ -42,7 +43,7 @@
   "manifest_version": 2,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "1.3.7",
+  "version": "1.4.0",
   "icons": {
     "48": "icons/icon.svg"
   },

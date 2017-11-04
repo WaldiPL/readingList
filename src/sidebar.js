@@ -1,5 +1,5 @@
 (function(){
-	list();
+	list(true);
 	translate();
 	document.getElementById("search").addEventListener("input",search);
 	document.getElementById("sort").addEventListener("click",()=>{
@@ -13,7 +13,7 @@
 		sortPopup[3].addEventListener("click",e=>{sortList("za");});
 })();
 
-function list(){
+function list(sync){
 	browser.storage.local.get().then(result=>{
 		let pages=result.pages,
 			thumbs=result.thumbs,
@@ -58,6 +58,10 @@ function list(){
 							});
 						}
 					});
+					if(thumbs[i].base==="icons/thumb.svg")
+						eA.addEventListener("click",e=>{
+							browser.runtime.sendMessage({"updateThumb":true,"id":i,"url":value.url});
+						});
 				let eBox=document.createElement("div");
 					eBox.className="box";
 				let eTitle=document.createElement("div");
@@ -98,6 +102,7 @@ function list(){
 			sortList(settings.sort,true);
 		}
 		search();
+		if(sync)browser.runtime.sendMessage({"sync":true});
 	});
 }
 
@@ -107,7 +112,7 @@ function sortList(mode="descDate",auto){
 		btnSort=document.getElementById("popupSort").children;
 	document.getElementById("sort").classList.remove("active");
 	document.getElementById("popupSort").className="hidden";
-	if(rl.dataset.sort===mode)return;
+	if(rl.dataset.sort===mode&&!auto)return;
 	if(!auto){
 		browser.storage.local.get("settings").then(result=>{
 			let s=result.settings;
@@ -170,7 +175,6 @@ function sortList(mode="descDate",auto){
 		[...titles].forEach(v=>{
 			let index=arrTitles.indexOf(v.textContent.toLowerCase());
 			arrTitles[index]=null;
-			console.log(v);
 			arrId[index]=(document.body.className==="normal")?v.parentElement.parentElement.parentElement.parentElement.id:v.parentElement.parentElement.parentElement.id;
 		});
 		arrId.forEach(v=>{

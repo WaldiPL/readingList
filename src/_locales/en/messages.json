@@ -172,5 +172,8 @@
   },
   "openChangelog": {
     "message": "Open the 'Changelog' page after update."
+  },
+  "folderName": {
+    "message": "Reading List (do not delete)"
   }
 }

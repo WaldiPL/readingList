@@ -2,7 +2,9 @@ init();
 let iconTheme,
 	urlList=[],
 	clearNotify,
-	iconChanged;
+	iconChanged,
+	folderId,
+	folderCreating;
 
 browser.runtime.onInstalled.addListener(handleInstalled);
 function handleInstalled(details){
@@ -72,6 +74,7 @@ function init(){
 				});
 			}
 			showContext(result.settings.addToContextMenu);
+			bookmarksFolder();
 		}else
 			setTimeout(init,100);
 	});
@@ -80,13 +83,13 @@ function init(){
 browser.runtime.onMessage.addListener(run);
 function run(m,s){
 	if(m.deleted){
+		bookmarksDelete(urlList[m.id]);
 		browser.tabs.query({
 			url:urlList[m.id]
 		}).then(tab=>{
 			urlList.splice(m.id,1);
-			if(tab[0]){
+			if(tab[0])
 				setIcon(tab[0].id,tab[0].url);
-			}
 		});
 	}else if(m.fromContent){
 		remove(s.tab,onList(s.url));
@@ -102,6 +105,10 @@ function run(m,s){
 		});
 	}else if(m.addToContextMenu!=undefined){
 		showContext(m.addToContextMenu);
+	}else if(m.sync){
+		bookmarksFolder();
+	}else if(m.updateThumb){
+		updateThumb(m.id,m.url);
 	}
 }
 
@@ -175,13 +182,14 @@ browser.runtime.getBrowserInfo().then(e=>{
 });
 
 function remove(tab,il){
-	browser.storage.local.get().then(result=>{
-		let pages = result.pages;
-		let thumbs = result.thumbs;
+	browser.storage.local.get(["pages","thumbs"]).then(result=>{
+		let pages=result.pages,
+			thumbs=result.thumbs;
 		pages.splice(il,1);
 		thumbs.splice(il,1);
 		browser.storage.local.set({pages:pages,thumbs:thumbs});
 	}).then(()=>{
+		bookmarksDelete(tab.url);
 		urlList.splice(il,1);
 		setIcon(tab.id,tab.url);
 		browser.runtime.sendMessage({"refreshList":true});
@@ -204,10 +212,11 @@ function save(tab,base64){
 			base: base64
 		};
 		urlList.unshift(tab.url);
-		setIcon(tab.id,tab.url)
+		setIcon(tab.id,tab.url);
 		pages.unshift(page);
 		thumbs.unshift(thumb);
 		browser.storage.local.set({pages:pages,thumbs:thumbs});
+		bookmarksAdd(tab);
 		if(settings.showNotification)notify("single",settings.notificationTime,tab);
 	}).then(()=>{
 		browser.runtime.sendMessage({"refreshList":true});
@@ -280,6 +289,7 @@ function addAll(){
 					setIcon(tab.id,tab.url)
 					pages.unshift(page);
 					thumbs.unshift(thumb);
+					bookmarksAdd(tab);
 				}
 			});
 			browser.storage.local.set({pages:pages,thumbs:thumbs});
@@ -342,6 +352,157 @@ function contextAdd(e){
 				});
 			}else
 				save(tab,"icons/thumb.svg");
+		}
+	});
+}
+
+function bookmarksFolder(){
+	browser.storage.local.get("bookmarks").then(result=>{
+		browser.bookmarks.search({
+			title:browser.i18n.getMessage("folderName")
+		}).then(search=>{
+			if(search.length){
+				if(result.bookmarks===undefined||result.bookmarks.folderId!==search[0].id){
+					folderId=search[0].id;
+					browser.storage.local.set({bookmarks:{
+						folderId:folderId
+					}});
+				}else
+					folderId=result.bookmarks.folderId;
+				bookmarksSync();
+			}else{
+				browser.bookmarks.create({
+					title:browser.i18n.getMessage("folderName"),
+					type:"folder",
+					index:0
+				}).then(folder=>{
+					folderId=folder.id;
+					browser.storage.local.set({bookmarks:{
+						folderId:folderId
+					}});
+					bookmarksSync(true);
+				});
+			}
+		});
+	});
+}
+
+function bookmarksSync(created){
+	if(created){
+		folderCreating=true;
+		browser.storage.local.get("pages").then(result=>{
+			let pages=result.pages;
+			pages.forEach(v=>{
+				browser.bookmarks.create({
+					url:v.url,
+					title:v.title,
+					parentId:folderId
+				});
+			});
+			setTimeout(()=>{folderCreating=false;},2000);
+		});
+	}else if(!folderCreating){
+		browser.bookmarks.getChildren(folderId).then(bookmarks=>{
+			let folderList=[],
+				addUrls=[],
+				deleteUrls=[];
+			bookmarks.forEach(v=>{
+				if(urlList.indexOf(v.url)<0){
+					addUrls.push({url:v.url,title:v.title});
+				}
+				folderList.unshift(v.url);
+			});
+			urlList.forEach((v,i)=>{
+				if(folderList.indexOf(v)<0){
+					deleteUrls.unshift({url:v,id:i});
+				}
+			});
+			syncFolderList(deleteUrls,addUrls);
+		});
+	}
+}
+
+function bookmarksDelete(url){
+	browser.bookmarks.search({url:url}).then(bookmarks=>{
+		bookmarks.forEach(v=>{
+		  if(v.parentId===folderId)browser.bookmarks.remove(v.id);
+		});
+	});
+}
+
+function bookmarksAdd(tab){
+	browser.bookmarks.create({
+		parentId:folderId,
+		title:tab.title,
+		url:tab.url
+	});
+}
+
+function syncFolderList(deleteUrls,addUrls){
+	browser.storage.local.get(["pages","thumbs"]).then(result=>{
+		let pages=result.pages,
+			thumbs=result.thumbs;
+		deleteUrls.forEach(v=>{
+			pages.splice(v.id,1);
+			thumbs.splice(v.id,1);
+			urlList.splice(v.id,1);
+		});
+		addUrls.forEach(v=>{
+			let page={
+					url:     v.url,
+					domain:  v.url.split("/")[2],
+					title:   v.title,
+					favicon: "icons/fav.png",
+				};
+			urlList.unshift(v.url);
+			pages.unshift(page);
+			thumbs.unshift({base:"icons/thumb.svg"});
+		});
+		browser.storage.local.set({pages:pages,thumbs:thumbs});
+	}).then(()=>{
+		deleteUrls.forEach(v=>{
+			browser.tabs.query({url:v.url}).then(tab=>{
+				if(tab[0])setIcon(tab[0].id,tab[0].url);
+			});
+		});
+		addUrls.forEach(v=>{
+			browser.tabs.query({url:v.url}).then(tab=>{
+				if(tab[0])setIcon(tab[0].id,tab[0].url);
+			});
+		});
+		if(deleteUrls.length||addUrls.length)browser.runtime.sendMessage({"refreshList":true});
+	});
+}
+
+function updateThumb(id,url){
+	browser.tabs.query({url:url}).then(tabs=>{
+		let tab=tabs[0];
+		if(!tab||tab.status!=="complete"){
+			setTimeout(()=>{updateThumb(id,url);},500);
+			return;
+		}
+		if(tab.active){
+			browser.tabs.captureVisibleTab().then(e=>{
+				resize(e,f=>{
+					browser.storage.local.get(["pages","thumbs"]).then(result=>{
+						let pages=result.pages,
+							thumbs=result.thumbs;
+						pages[id].favicon=tab.favIconUrl;
+						thumbs[id].base=f;
+						browser.storage.local.set({pages:pages,thumbs:thumbs});
+					}).then(()=>{
+						browser.runtime.sendMessage({"refreshList":true});
+					});
+				});
+			});
+		}else{
+			browser.storage.local.get("pages").then(result=>{
+				let pages=result.pages;
+				pages[id].favicon=tab.favIconUrl;
+				browser.storage.local.set({pages:pages});
+			}).then(()=>{
+				browser.runtime.sendMessage({"refreshList":true});
+			});
 		}
 	});
 }

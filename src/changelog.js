@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.4.0",
+		"changes":["Added synchronization via folder in bookmarks. Deleting a page from bookmarks will also delete it from the list. #13","Added function to restore missing thumbnails","Fixed bugs"],
+		"changesPL":["Dodano synchronizację poprzez folder w zakładkach. Usunięcie strony z zakładek usunie ją również z listy. #13","Dodano funkcję przywracania brakujących miniatur","Naprawiono błędy"]
+	},
 	{"version":"1.3.7",
 		"changes":["Fixed bugs","Added option to disable the 'Changelog' page after update"],
 		"changesPL":["Naprawiono błędy","Dodano opcję wyłączenie strony 'Historia zmian' po aktualizacji"]
