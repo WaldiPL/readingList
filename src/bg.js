@@ -4,7 +4,8 @@ let iconTheme,
 	clearNotify,
 	iconChanged,
 	folderId,
-	folderCreating;
+	folderCreating,
+	pageAction;
 
 browser.runtime.onInstalled.addListener(handleInstalled);
 function handleInstalled(details){
@@ -30,7 +31,8 @@ function handleInstalled(details){
 					"iconTheme":"dark",
 					"showSort":true,
 					"sort":"descDate",
-					"changelog":true
+					"changelog":true,
+					"pageAction":false
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
@@ -39,14 +41,16 @@ function handleInstalled(details){
 					"iconTheme":"dark",
 					"showSort":true,
 					"sort":"descDate",
-					"changelog":true
+					"changelog":true,
+					"pageAction":false
 				});
 				browser.storage.local.set({settings:result.settings});
 			}else if(result.settings.showSort===undefined){
 				result.settings=Object.assign(result.settings,{
 					"showSort":true,
 					"sort":"descDate",
-					"changelog":true
+					"changelog":true,
+					"pageAction":false
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
@@ -64,6 +68,7 @@ function init(){
 	browser.storage.local.get(["pages","settings"]).then(result=>{
 		if(result.settings){
 			iconTheme=result.settings.iconTheme;
+			pageAction=result.settings.pageAction;
 			browser.browserAction.setIcon({
 				path:`icons/btn.svg#${iconTheme}`
 			}).then(()=>{iconChanged=true;});
@@ -103,23 +108,58 @@ function run(m,s){
 				tabId:s.tab.id
 			});
 		});
+		browser.pageAction.setIcon({
+			path:(iconTheme==="white")?`icons/btn.svg#dark`:`icons/btn.svg#${iconTheme}`,
+			tabId:s.tab.id
+		});
 	}else if(m.addToContextMenu!=undefined){
 		showContext(m.addToContextMenu);
 	}else if(m.sync){
 		bookmarksFolder();
 	}else if(m.updateThumb){
 		updateThumb(m.id,m.url);
+	}else if(m.restoredBackup){
+		urlList=[];
+		browser.storage.local.get("pages").then(result=>{
+			let pages=result.pages;
+			if(pages){
+				pages.forEach(value=>{
+					urlList.push(value.url);
+				});
+			}
+			browser.bookmarks.getChildren(folderId).then(bookmarks=>{
+				let folderList=[];
+				bookmarks.forEach(v=>{
+					if(urlList.indexOf(v.url)<0){
+						browser.bookmarks.remove(v.id);
+					}
+					folderList.unshift(v.url);
+				});
+				urlList.forEach((v,i)=>{
+					if(folderList.indexOf(v)<0){
+						bookmarksAdd({"url":v,"title":pages[i].title});
+					}
+				});
+			});
+			browser.runtime.sendMessage({"refreshList":true});
+		});
+	}else if(m.pageAction){
+		pageAction=m.show;
 	}
 }
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo)=>{
 	if(!changeInfo.url)return;
 	setIcon(tabId,changeInfo.url);
+	if(pageAction)browser.pageAction.show(tabId);
+	else browser.pageAction.hide(tabId);
 });
 
 browser.tabs.onActivated.addListener(activeInfo=>{
 	browser.tabs.get(activeInfo.tabId).then(tab=>{
 		setIcon(activeInfo.tabId,tab.url);
+		if(pageAction)browser.pageAction.show(activeInfo.tabId);
+		else browser.pageAction.hide(activeInfo.tabId);
 	});
 });
 
@@ -131,7 +171,18 @@ function setIcon(tabId,url){
 			tabId: tabId
 		});
 		browser.browserAction.setTitle({
-			title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction")
+			title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction"),
+			tabId:tabId
+		});
+		let iconTheme2=iconTheme;
+		if(iconTheme==="white")iconTheme2="dark";
+		browser.pageAction.setIcon({
+			path:(a>=0)?`icons/btn.svg#${iconTheme2}D`:`icons/btn.svg#${iconTheme2}`,
+			tabId:tabId
+		});
+		browser.pageAction.setTitle({
+			title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction"),
+			tabId:tabId
 		});
 		a>=0?insert(tabId,false):insert(tabId,true);
 	}else
@@ -142,18 +193,21 @@ function onList(url){
 	return urlList.indexOf(url);
 }
 
-browser.browserAction.onClicked.addListener(tab=>{
+function onClicked(tab){
 	const il=onList(tab.url);
 	if(il>=0){
 		remove(tab,il);
 	}else{
-		 browser.tabs.captureVisibleTab().then(e=>{
-			resize(e,f=>{
-				save(tab,f);
+		 browser.tabs.captureVisibleTab().then(thumb=>{
+			resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+				save(tab,thumb64,favicon64);
 			});
 		});
 	}
-});
+}
+
+browser.browserAction.onClicked.addListener(onClicked);
+browser.pageAction.onClicked.addListener(onClicked);
 
 browser.contextMenus.create({
 	title:		browser.i18n.getMessage("addAll"),
@@ -196,7 +250,7 @@ function remove(tab,il){
 	});
 }
 
-function save(tab,base64){
+function save(tab,thumb64,favicon64){
 	browser.storage.local.get().then(result=>{
 		let pages=result.pages,
 			thumbs=result.thumbs,
@@ -205,11 +259,11 @@ function save(tab,base64){
 				url:     tab.url,
 				domain:  tab.url.split("/")[2],
 				title:   tab.title,
-				favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png",
+				favicon: favicon64,
 			};
 		if(!page.domain)return;
 		let thumb={
-			base: base64
+			base: thumb64
 		};
 		urlList.unshift(tab.url);
 		setIcon(tab.id,tab.url);
@@ -223,18 +277,42 @@ function save(tab,base64){
 	});
 }
 
-function resize(src,callback){
-	let img=new Image();
-	img.onload = function() {
-		let canvas = document.createElement('canvas');
-		let ctx = canvas.getContext('2d');
-		canvas.width = 64;
-		canvas.height = 40;
-		ctx.drawImage(this, -30, 0, 190, 97);
-		let dataURL = canvas.toDataURL();
-		callback(dataURL);
+function resize(srcThumb,srcFavicon,callback){
+	let thumb=new Image(),
+		favicon=new Image(),
+		thumb64="icons/thumb.svg",
+		favicon64="icons/fav.png",
+		imgLoaded=0;
+	thumb.onload=()=>{
+		let canvas=document.createElement('canvas'),
+			ctx=canvas.getContext('2d');
+		canvas.width=64;
+		canvas.height=40;
+		ctx.drawImage(thumb,-30,0,190,97);
+		thumb64=canvas.toDataURL();
+		imgLoaded++;
+		if(imgLoaded===2)callback(thumb64,favicon64);
 	};
-	img.src = src;
+	favicon.onload=()=>{
+		let canvas=document.createElement('canvas'),
+			ctx=canvas.getContext('2d');
+		canvas.width=16;
+		canvas.height=16;
+		ctx.drawImage(favicon,0,0,16,16);
+		favicon64=canvas.toDataURL();
+		imgLoaded++;
+		if(imgLoaded===2)callback(thumb64,favicon64);
+	};
+	thumb.onerror=()=>{
+		imgLoaded++;
+		if(imgLoaded===2)callback(thumb64,favicon64);
+	}
+	favicon.onerror=()=>{
+		imgLoaded++;
+		if(imgLoaded===2)callback(thumb64,favicon64);
+	}
+	thumb.src=srcThumb;
+	favicon.src=srcFavicon;
 }
 
 function insert(tabId,del){
@@ -345,13 +423,16 @@ function contextAdd(e){
 			});
 		}else{
 			if(tab.active){
-				browser.tabs.captureVisibleTab().then(e=>{
-					resize(e,f=>{
-						save(tab,f);
+				browser.tabs.captureVisibleTab().then(thumb=>{
+					resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+						save(tab,thumb64,favicon64);
 					});
 				});
-			}else
-				save(tab,"icons/thumb.svg");
+			}else{
+				resize("",tab.favIconUrl,(thumb64,favicon64)=>{
+					save(tab,"icons/thumb.svg",favicon64);
+				});
+			}
 		}
 	});
 }
@@ -482,13 +563,13 @@ function updateThumb(id,url){
 			return;
 		}
 		if(tab.active){
-			browser.tabs.captureVisibleTab().then(e=>{
-				resize(e,f=>{
+			browser.tabs.captureVisibleTab().then(thumb=>{
+				resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
 					browser.storage.local.get(["pages","thumbs"]).then(result=>{
 						let pages=result.pages,
 							thumbs=result.thumbs;
-						pages[id].favicon=tab.favIconUrl;
-						thumbs[id].base=f;
+						pages[id].favicon=favicon64;
+						thumbs[id].base=thumb64;
 						browser.storage.local.set({pages:pages,thumbs:thumbs});
 					}).then(()=>{
 						browser.runtime.sendMessage({"refreshList":true});

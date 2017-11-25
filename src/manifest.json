@@ -28,6 +28,11 @@
 		"size": 19
 	}]
   },
+  "page_action": {
+    "default_icon": {
+      "19": "icons/btn.svg#dark"
+    }
+  },
   "background": {
     "page": "bg.html"
   },
@@ -43,13 +48,13 @@
   "manifest_version": 2,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "1.4.0",
+  "version": "1.4.5",
   "icons": {
     "48": "icons/icon.svg"
   },
   "options_ui": {
     "browser_style": false,
-    "page": "/index.html",
+    "page": "/index.html#options",
 	"open_in_tab": true
   }
 }

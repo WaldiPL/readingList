@@ -11,10 +11,11 @@
 		sortPopup[1].addEventListener("click",e=>{sortList("ascDate");});
 		sortPopup[2].addEventListener("click",e=>{sortList("az");});
 		sortPopup[3].addEventListener("click",e=>{sortList("za");});
+	document.addEventListener('selectstart',e=>{if(!(e.target.type==="search"))e.preventDefault();});
 })();
 
 function list(sync){
-	browser.storage.local.get().then(result=>{
+	browser.storage.local.get(["pages","thumbs","settings"]).then(result=>{
 		let pages=result.pages,
 			thumbs=result.thumbs,
 			settings=result.settings,
@@ -99,6 +100,8 @@ function list(sync){
 				pageContainer.appendChild(eDelete);
 				container.appendChild(pageContainer);
 			});
+			let firstFavicon=document.getElementsByClassName("favicon")[0].src;
+			if(!firstFavicon.startsWith("data:image"))convertFavicons();
 			sortList(settings.sort,true);
 		}
 		search();
@@ -247,4 +250,38 @@ function translate(){
 		sortPopup[1].textContent=i18n("ascDate");
 		sortPopup[2].textContent=i18n("az");
 		sortPopup[3].textContent=i18n("za");
+}
+
+function convertFavicons(){
+	browser.storage.local.get("pages").then(result=>{
+		let pages=result.pages;
+		for(let i=0;i<pages.length;i++){
+			favicon64(pages[i].favicon,(b64,fc)=>{
+				pages[i]=Object.assign(pages[i],{favicon:b64});
+				if(fc===pages.length){
+					browser.storage.local.set({pages:pages});
+				}
+			});
+		}
+	});
+}
+
+let faviconCount=0;
+function favicon64(faviconSrc,callback){
+	let img=new Image();
+	img.onload=e=>{
+		faviconCount++;
+		let canvas=document.createElement('canvas'),
+			ctx=canvas.getContext('2d');
+		canvas.width=16;
+		canvas.height=16;
+		ctx.drawImage(e.target,0,0,16,16);
+		let dataURL=canvas.toDataURL();
+		callback(dataURL,faviconCount);
+	};
+	img.onerror=()=>{
+		faviconCount++;
+		callback("icons/fav.png",faviconCount);
+	}
+	img.src=faviconSrc;
 }

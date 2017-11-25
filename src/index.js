@@ -12,6 +12,7 @@
 	document.addEventListener("DOMContentLoaded",restoreOptions);
 	document.getElementById("optionsForm").addEventListener("change",saveOptions);
 	document.getElementById("iconTheme").addEventListener("change",e=>{browser.runtime.sendMessage({"iconTheme":e.target.value});});
+	document.getElementById("showPageAction").addEventListener("change",e=>{browser.runtime.sendMessage({"pageAction":true,"show":e.target.checked});});
 	document.getElementById("addToContextMenu").addEventListener("change",e=>{browser.runtime.sendMessage({"addToContextMenu":e.target.checked});});
 	document.getElementById("backup").addEventListener("click",createBackup);
 	window.addEventListener("hashchange",e=>{changeActive(e.newURL.split("#")[1]);});
@@ -37,7 +38,8 @@ function saveOptions(){
 		iconTheme:			document.getElementById("iconTheme").value,
 		showSort:			document.getElementById("showSort").checked,
 		sort:				document.getElementById("sort").value,
-		changelog:			document.getElementById("openChangelog").checked
+		changelog:			document.getElementById("openChangelog").checked,
+		pageAction:			document.getElementById("showPageAction").checked
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
@@ -67,6 +69,7 @@ function restoreOptions(){
 			document.getElementById("showSort").disabled=true;
 		}
 		document.getElementById("openChangelog").checked=s.changelog!==false?true:false;
+		document.getElementById("showPageAction").checked=s.pageAction;
 	});
 }
 
@@ -141,6 +144,7 @@ function translate(){
 		sort[2].text=i18n("az");
 		sort[3].text=i18n("za");
 	document.getElementById("labelOpenChangelog").textContent=i18n("openChangelog");
+	document.getElementById("labelShowPageAction").textContent=i18n("showPageAction");
 }
 
 function i18n(e,s1){
@@ -184,7 +188,7 @@ function restoreBackup(){
 	browser.storage.local.set({pages:uploaded.pages,thumbs:uploaded.thumbs}).then(()=>{
 		document.getElementById("restoreAlert").className="none";
 		document.getElementById("restoreOk").removeAttribute("class");
-		browser.runtime.sendMessage({"refreshList":true});
+		browser.runtime.sendMessage({"restoredBackup":true});
 	},()=>{
 		document.getElementById("restoreAlert").className="none";
 		document.getElementById("restoreError").removeAttribute("class");

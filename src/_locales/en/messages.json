@@ -171,9 +171,12 @@
     "message": "from Z to A"
   },
   "openChangelog": {
-    "message": "Open the 'Changelog' page after update."
+    "message": "Open the 'Changelog' page after update"
   },
   "folderName": {
     "message": "Reading List (do not delete)"
+  },
+  "showPageAction": {
+    "message": "Show button in the address bar"
   }
 }
