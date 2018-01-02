@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.4.6",
+		"changes":["Changed shortcut for Linux (Alt+R) #19","The page icons after synchronization use icons.better-idea.org"],
+		"changesPL":["Zmieniono skrót klawiaturowy dla Linuksa (Alt+R) #19","Ikony stron po synchronizacji używają icons.better-idea.org","Poprawiono literówkę"]
+	},
 	{"version":"1.4.5",
 		"changes":["Favicons are now in the database #14","Added possibility to enable button in the adress bar #16","Fixed issue with database restoration","Minor changes"],
 		"changesPL":["Ikony stron są teraz w bazie danych #14","Dodano możliwość włączenia przycisku na pasku adresu #16","Naprawiono problem z przywracaniem bazy danych","Drobne zmiany"]

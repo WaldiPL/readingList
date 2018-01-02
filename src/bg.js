@@ -533,7 +533,7 @@ function syncFolderList(deleteUrls,addUrls){
 					url:     v.url,
 					domain:  v.url.split("/")[2],
 					title:   v.title,
-					favicon: "icons/fav.png",
+					favicon: "https://icons.better-idea.org/icon?size=16..32..32&url="+v.url,
 				};
 			urlList.unshift(v.url);
 			pages.unshift(page);
