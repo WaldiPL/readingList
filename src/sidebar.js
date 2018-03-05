@@ -12,6 +12,16 @@
 		sortPopup[2].addEventListener("click",e=>{sortList("az");});
 		sortPopup[3].addEventListener("click",e=>{sortList("za");});
 	document.addEventListener('selectstart',e=>{if(!(e.target.type==="search"))e.preventDefault();});
+	document.documentElement.addEventListener("click",e=>{
+		if(e.target.id!=="sort"&&e.target.parentElement.id!=="popupSort"){
+			document.getElementById("sort").classList.remove("active");
+			document.getElementById("popupSort").classList.add("hidden");
+		}
+	});
+	document.getElementById("clear").addEventListener("click",e=>{
+		document.getElementById("search").value="";
+		search();
+	});
 })();
 
 function list(sync){
@@ -59,10 +69,15 @@ function list(sync){
 							});
 						}
 					});
-					if(thumbs[i].base==="icons/thumb.svg")
+					if(thumbs[i].base==="icons/thumb.svg"){
 						eA.addEventListener("click",e=>{
 							browser.runtime.sendMessage({"updateThumb":true,"id":i,"url":value.url});
 						});
+						eA.addEventListener("mouseup",e=>{
+							if(e.button===1)
+								browser.runtime.sendMessage({"updateThumb":true,"id":i,"url":value.url});
+						});
+					}
 				let eBox=document.createElement("div");
 					eBox.className="box";
 				let eTitle=document.createElement("div");

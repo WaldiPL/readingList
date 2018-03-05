@@ -90,7 +90,7 @@ function run(m,s){
 	if(m.deleted){
 		bookmarksDelete(urlList[m.id]);
 		browser.tabs.query({
-			url:urlList[m.id]
+			url:urlList[m.id].split("#")[0]
 		}).then(tab=>{
 			urlList.splice(m.id,1);
 			if(tab[0])
@@ -211,13 +211,13 @@ browser.pageAction.onClicked.addListener(onClicked);
 
 browser.contextMenus.create({
 	title:		browser.i18n.getMessage("addAll"),
-	contexts:	["browser_action"],
+	contexts:	["browser_action","page_action"],
 	onclick:	()=>{addAll();}
 });
 
 browser.contextMenus.create({
 	title:		browser.i18n.getMessage("options"),
-	contexts:	["browser_action"],
+	contexts:	["browser_action","page_action"],
 	onclick:	()=>{browser.runtime.openOptionsPage();}
 });
 
@@ -227,7 +227,7 @@ browser.runtime.getBrowserInfo().then(e=>{
 		browser.contextMenus.create({
 			id:			"showRL",
 			title:		browser.i18n.getMessage("showRL"),
-			contexts:	["browser_action"],
+			contexts:	["browser_action","page_action"],
 		});
 		browser.contextMenus.onClicked.addListener(info=>{
 			if(info.menuItemId==="showRL")browser.sidebarAction.open();
@@ -412,11 +412,11 @@ function showContext(e){
 
 function contextAdd(e){
 	browser.tabs.query({
-		url:e.pageUrl,
+		url:e.pageUrl.split("#")[0],
 		currentWindow:true
 	}).then(tabs=>{
 		const tab=tabs[0],
-			  il=onList(tab.url);
+			  il=onList(e.pageUrl);
 		if(il>=0){
 			browser.storage.local.get("settings").then(result=>{
 				if(result.settings.showNotification)notify("single",result.settings.notificationTime,tab);
@@ -429,8 +429,19 @@ function contextAdd(e){
 					});
 				});
 			}else{
-				resize("",tab.favIconUrl,(thumb64,favicon64)=>{
-					save(tab,"icons/thumb.svg",favicon64);
+				browser.runtime.getBrowserInfo().then(e=>{
+					let version=+e.version.substr(0,2);
+					if(version>=59){
+						browser.tabs.captureTab(tab.id).then(thumb=>{
+							resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+								save(tab,thumb64,favicon64);
+							});
+						});
+					}else{
+						resize("",tab.favIconUrl,(thumb64,favicon64)=>{
+							save(tab,"icons/thumb.svg",favicon64);
+						});
+					}
 				});
 			}
 		}
@@ -533,7 +544,7 @@ function syncFolderList(deleteUrls,addUrls){
 					url:     v.url,
 					domain:  v.url.split("/")[2],
 					title:   v.title,
-					favicon: "https://icons.better-idea.org/icon?size=16..32..32&url="+v.url,
+					favicon: "https://www.google.com/s2/favicons?domain="+v.url
 				};
 			urlList.unshift(v.url);
 			pages.unshift(page);
@@ -555,14 +566,15 @@ function syncFolderList(deleteUrls,addUrls){
 	});
 }
 
-function updateThumb(id,url){
-	browser.tabs.query({url:url}).then(tabs=>{
+function updateThumb(id,url,i=0){
+	browser.tabs.query({url:url.split("#")[0]}).then(tabs=>{
 		let tab=tabs[0];
-		if(!tab||tab.status!=="complete"){
-			setTimeout(()=>{updateThumb(id,url);},500);
+		if(!tab&&i>5){
 			return;
-		}
-		if(tab.active){
+		}else if(!tab||tab.status!=="complete"){
+			setTimeout(()=>{updateThumb(id,url,i+1);},500);
+			return;
+		}else if(tab.active){
 			browser.tabs.captureVisibleTab().then(thumb=>{
 				resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
 					browser.storage.local.get(["pages","thumbs"]).then(result=>{
@@ -577,12 +589,31 @@ function updateThumb(id,url){
 				});
 			});
 		}else{
-			browser.storage.local.get("pages").then(result=>{
-				let pages=result.pages;
-				pages[id].favicon=tab.favIconUrl;
-				browser.storage.local.set({pages:pages});
-			}).then(()=>{
-				browser.runtime.sendMessage({"refreshList":true});
+			browser.runtime.getBrowserInfo().then(e=>{
+				let version=+e.version.substr(0,2);
+				if(version>=59){
+					browser.tabs.captureTab(tab.id).then(thumb=>{
+						resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+							browser.storage.local.get(["pages","thumbs"]).then(result=>{
+								let pages=result.pages,
+									thumbs=result.thumbs;
+								pages[id].favicon=favicon64;
+								thumbs[id].base=thumb64;
+								browser.storage.local.set({pages:pages,thumbs:thumbs});
+							}).then(()=>{
+								browser.runtime.sendMessage({"refreshList":true});
+							});
+						});
+					});
+				}else{
+					browser.storage.local.get("pages").then(result=>{
+						let pages=result.pages;
+						pages[id].favicon=tab.favIconUrl;
+						browser.storage.local.set({pages:pages});
+					}).then(()=>{
+						browser.runtime.sendMessage({"refreshList":true});
+					});
+				}
 			});
 		}
 	});
