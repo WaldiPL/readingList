@@ -65,15 +65,40 @@ nav a{
 	background-position:left 10px center;
 	background-repeat:no-repeat;
 	background-size:24px 24px;
+	white-space:nowrap;
+}
+
+@media (max-width:830px){
+	body{
+		grid-template-columns:110px auto;
+	}
+	nav a{
+		color:red;
+		overflow:hidden;
+		width:0;
+		padding-right:0;
+	}
 }
 
 nav a.active{
 	color:#0A84FF;
 }
 
-nav a:hover{
-	background-color: #0c0c0d1a;
+nav a.active:hover,nav a.active:focus{
+	background-color:#d5d5d6;
+}
+
+nav a.active:active{
+	background-color:#c9c9ca;
+}
+
+nav a:hover,nav a:focus{
+	background-color:#ebebeb;
 	border-radius:2px;
+}
+
+nav a:active{
+	background-color:#dadada;
 }
 
 nav a img{
@@ -86,6 +111,7 @@ nav a img{
 section{
 	grid-area:content;
 	padding: 40px 28px 0 0;
+	overflow:auto;
 }
 
 h2{
@@ -123,7 +149,7 @@ input[type="checkbox"]:checked {
 	stroke: none;
 }
 
-input[type="checkbox"]:hover:not(:disabled) {
+input[type="checkbox"]:hover:not(:disabled),input[type="checkbox"]:focus:not(:disabled){
 	border-color: #0a84ff;;
 }
 
@@ -141,7 +167,7 @@ button{
 	font-size:13px;
 }
 
-button:hover,select:hover,#fileInput:hover{
+button:hover,select:hover,#fileInput:hover,button:focus,select:focus{
 	background-color:#ebebeb;
 }
 
@@ -221,7 +247,7 @@ article:hover{
 	color:#fff;
 }
 
-.share:hover{
+.share:hover,.share:focus{
 	filter:brightness(1.15);
 }
 
@@ -295,6 +321,10 @@ section a{
 	text-decoration:none;
 }
 
-section a:hover{
+section a:hover,section a:focus{
 	text-decoration:underline;
+}
+
+*:focus{
+	outline:none;
 }

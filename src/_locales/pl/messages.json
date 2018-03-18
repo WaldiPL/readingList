@@ -178,5 +178,24 @@
   },
   "showPageAction": {
     "message": "Pokaż przycisk na pasku adresu"
+  },
+  "labelReaderMode": {
+    "message": "Tryb poprawionej czytelności"
+  },
+  "readerMode0": {
+    "message": "Nie otwieraj żadnej strony"
+  },
+  "readerMode1": {
+    "message": "Otwieraj tylko te strony, które na pewno mogą być wyświetlone"
+  },
+  "readerMode2": {
+    "message": "Otwieraj strony oprócz tych, które na pewno nie mogą być wyświetlone"
+  },
+  "readerMode3": {
+    "message": "Otwieraj wszystkie strony"
+  },
+  "failedReaderTitle": {
+    "message": "Nie udało się wczytać artykułu z tej strony",
+	"description": "This string must be copied from https://hg.mozilla.org/l10n-central/<lang-code>/file/tip/toolkit/chrome/global/aboutReader.properties where <lang-code> is eg. fr, zh-CN, pt-BR (aboutReader.loadError)"
   }
 }

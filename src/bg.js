@@ -32,7 +32,8 @@ function handleInstalled(details){
 					"showSort":true,
 					"sort":"descDate",
 					"changelog":true,
-					"pageAction":false
+					"pageAction":false,
+					"readerMode":0
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
@@ -42,7 +43,8 @@ function handleInstalled(details){
 					"showSort":true,
 					"sort":"descDate",
 					"changelog":true,
-					"pageAction":false
+					"pageAction":false,
+					"readerMode":0
 				});
 				browser.storage.local.set({settings:result.settings});
 			}else if(result.settings.showSort===undefined){
@@ -50,7 +52,8 @@ function handleInstalled(details){
 					"showSort":true,
 					"sort":"descDate",
 					"changelog":true,
-					"pageAction":false
+					"pageAction":false,
+					"readerMode":0
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
@@ -91,10 +94,18 @@ function run(m,s){
 		bookmarksDelete(urlList[m.id]);
 		browser.tabs.query({
 			url:urlList[m.id].split("#")[0]
-		}).then(tab=>{
+		}).then(tabs=>{
 			urlList.splice(m.id,1);
-			if(tab[0])
-				setIcon(tab[0].id,tab[0].url);
+			tabs.forEach(tab=>{
+				setIcon(tab.id,tab.url);
+			});
+		});
+		browser.tabs.query({
+			active:true
+		}).then(tabs=>{
+			tabs.forEach(tab=>{
+				setIcon(tab.id,tab.url);
+			});
 		});
 	}else if(m.fromContent){
 		remove(s.tab,onList(s.url));
@@ -117,7 +128,7 @@ function run(m,s){
 	}else if(m.sync){
 		bookmarksFolder();
 	}else if(m.updateThumb){
-		updateThumb(m.id,m.url);
+		updateThumb(m.id,m.url,m.tab2);
 	}else if(m.restoredBackup){
 		urlList=[];
 		browser.storage.local.get("pages").then(result=>{
@@ -145,6 +156,8 @@ function run(m,s){
 		});
 	}else if(m.pageAction){
 		pageAction=m.show;
+	}else if(m.updateReader){
+		updateReader(m.id,m.tabId,m.url);
 	}
 }
 
@@ -190,7 +203,7 @@ function setIcon(tabId,url){
 }
 
 function onList(url){
-	return urlList.indexOf(url);
+	return urlList.indexOf(getURL(url));
 }
 
 function onClicked(tab){
@@ -243,7 +256,7 @@ function remove(tab,il){
 		thumbs.splice(il,1);
 		browser.storage.local.set({pages:pages,thumbs:thumbs});
 	}).then(()=>{
-		bookmarksDelete(tab.url);
+		bookmarksDelete(getURL(tab.url));
 		urlList.splice(il,1);
 		setIcon(tab.id,tab.url);
 		browser.runtime.sendMessage({"refreshList":true});
@@ -255,18 +268,20 @@ function save(tab,thumb64,favicon64){
 		let pages=result.pages,
 			thumbs=result.thumbs,
 			settings=result.settings,
+			url=getURL(tab.url),
 			page={
-				url:     tab.url,
-				domain:  tab.url.split("/")[2],
+				url:     url,
+				domain:  url.split("/")[2],
 				title:   tab.title,
 				favicon: favicon64,
+				reader:  tab.isArticle||tab.isInReaderMode
 			};
 		if(!page.domain)return;
 		let thumb={
 			base: thumb64
 		};
-		urlList.unshift(tab.url);
-		setIcon(tab.id,tab.url);
+		urlList.unshift(url);
+		setIcon(tab.id,url);
 		pages.unshift(page);
 		thumbs.unshift(thumb);
 		browser.storage.local.set({pages:pages,thumbs:thumbs});
@@ -353,18 +368,20 @@ function addAll(){
 				page;
 			tempE.forEach(tab=>{
 				if(onList(tab.url)<0){
+					let url=getURL(tab.url);
 					page={
-						url:     tab.url,
-						domain:  tab.url.split("/")[2],
+						url:     url,
+						domain:  url.split("/")[2],
 						title:   tab.title,
-						favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png"
+						favicon: tab.favIconUrl?tab.favIconUrl:"icons/fav.png",
+						reader:  tab.isArticle||tab.isInReaderMode
 					};
 					if(!page.domain)return;
 					let thumb={
 						base: "icons/thumb.svg"
 					};
-					urlList.unshift(tab.url);
-					setIcon(tab.id,tab.url)
+					urlList.unshift(url);
+					setIcon(tab.id,url)
 					pages.unshift(page);
 					thumbs.unshift(thumb);
 					bookmarksAdd(tab);
@@ -410,42 +427,50 @@ function showContext(e){
 		browser.contextMenus.remove("addToReadingList");
 }
 
-function contextAdd(e){
-	browser.tabs.query({
-		url:e.pageUrl.split("#")[0],
+async function contextAdd(e){
+	const url=getURL(e.pageUrl);
+	let tabs=await browser.tabs.query({
+		url:url.split("#")[0],
 		currentWindow:true
-	}).then(tabs=>{
-		const tab=tabs[0],
-			  il=onList(e.pageUrl);
-		if(il>=0){
-			browser.storage.local.get("settings").then(result=>{
-				if(result.settings.showNotification)notify("single",result.settings.notificationTime,tab);
+	});
+	if(!tabs.length){
+		tabs=await browser.tabs.query({
+			currentWindow:true
+		});
+		tabs=tabs.filter(v=>{
+			return v.url===e.pageUrl;
+		})
+	}
+	const tab=tabs[0],
+		  il=onList(url);
+	if(il>=0){
+		browser.storage.local.get("settings").then(result=>{
+			if(result.settings.showNotification)notify("single",result.settings.notificationTime,tab);
+		});
+	}else{
+		if(tab.active){
+			browser.tabs.captureVisibleTab().then(thumb=>{
+				resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+					save(tab,thumb64,favicon64);
+				});
 			});
 		}else{
-			if(tab.active){
-				browser.tabs.captureVisibleTab().then(thumb=>{
-					resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
-						save(tab,thumb64,favicon64);
+			browser.runtime.getBrowserInfo().then(e=>{
+				let version=+e.version.substr(0,2);
+				if(version>=59){
+					browser.tabs.captureTab(tab.id).then(thumb=>{
+						resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
+							save(tab,thumb64,favicon64);
+						});
 					});
-				});
-			}else{
-				browser.runtime.getBrowserInfo().then(e=>{
-					let version=+e.version.substr(0,2);
-					if(version>=59){
-						browser.tabs.captureTab(tab.id).then(thumb=>{
-							resize(thumb,tab.favIconUrl,(thumb64,favicon64)=>{
-								save(tab,thumb64,favicon64);
-							});
-						});
-					}else{
-						resize("",tab.favIconUrl,(thumb64,favicon64)=>{
-							save(tab,"icons/thumb.svg",favicon64);
-						});
-					}
-				});
-			}
+				}else{
+					resize("",tab.favIconUrl,(thumb64,favicon64)=>{
+						save(tab,"icons/thumb.svg",favicon64);
+					});
+				}
+			});
 		}
-	});
+	}
 }
 
 function bookmarksFolder(){
@@ -526,7 +551,7 @@ function bookmarksAdd(tab){
 	browser.bookmarks.create({
 		parentId:folderId,
 		title:tab.title,
-		url:tab.url
+		url:getURL(tab.url)
 	});
 }
 
@@ -562,17 +587,22 @@ function syncFolderList(deleteUrls,addUrls){
 				if(tab[0])setIcon(tab[0].id,tab[0].url);
 			});
 		});
+		browser.tabs.query({active:true}).then(tabs=>{
+			tabs.forEach(tab=>{
+				setIcon(tab.id,tab.url);
+			});
+		});
 		if(deleteUrls.length||addUrls.length)browser.runtime.sendMessage({"refreshList":true});
 	});
 }
 
-function updateThumb(id,url,i=0){
+function updateThumb(id,url,tab2,i=0){
 	browser.tabs.query({url:url.split("#")[0]}).then(tabs=>{
-		let tab=tabs[0];
+		let tab=tabs[0]||tab2;
 		if(!tab&&i>5){
 			return;
-		}else if(!tab||tab.status!=="complete"){
-			setTimeout(()=>{updateThumb(id,url,i+1);},500);
+		}else if((!tab||tab.status!=="complete")||(tab2&&i<5)){
+			setTimeout(()=>{updateThumb(id,url,tab2,i+1);},500);
 			return;
 		}else if(tab.active){
 			browser.tabs.captureVisibleTab().then(thumb=>{
@@ -617,4 +647,34 @@ function updateThumb(id,url,i=0){
 			});
 		}
 	});
+}
+
+const failedReaderTitle=browser.i18n.getMessage("failedReaderTitle");	
+	
+async function updateReader(id,tabId,url,i=0){
+	let tab;
+	if(tabId!==undefined){
+		tab=await browser.tabs.get(tabId);
+	}else{
+		let tabs=await browser.tabs.query({url:url.split("#")[0]});
+		tab=tabs[0];
+		if(tab)tabId=tab.id;
+	}
+	if(tab&&tab.status==="complete"&&tab.isArticle!==undefined&&tab.isInReaderMode!==undefined&&!tab.title.startsWith("about:reader")){
+		const failedReader=tab.title===failedReaderTitle;
+		browser.storage.local.get(["pages"]).then(result=>{
+			let pages=result.pages;
+			pages[id].reader=tab.isArticle||(tab.isInReaderMode&&!failedReader);
+			browser.storage.local.set({pages:pages});
+		}).then(()=>{
+			browser.runtime.sendMessage({"refreshList":true});
+		});
+	}else if(i<5){
+		setTimeout(()=>{updateReader(id,tabId,url,i+1);},800);
+	}
+}
+
+function getURL(url){
+	if(url.charAt(0)==="a")url=decodeURIComponent(url.substr(17));
+	return url;
 }

@@ -39,7 +39,8 @@ function saveOptions(){
 		showSort:			document.getElementById("showSort").checked,
 		sort:				document.getElementById("sort").value,
 		changelog:			document.getElementById("openChangelog").checked,
-		pageAction:			document.getElementById("showPageAction").checked
+		pageAction:			document.getElementById("showPageAction").checked,
+		readerMode:			document.getElementById("readerMode").value
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
@@ -70,6 +71,7 @@ function restoreOptions(){
 		}
 		document.getElementById("openChangelog").checked=s.changelog!==false?true:false;
 		document.getElementById("showPageAction").checked=s.pageAction;
+		document.getElementById("readerMode").value=s.readerMode;
 	});
 }
 
@@ -145,6 +147,12 @@ function translate(){
 		sort[3].text=i18n("za");
 	document.getElementById("labelOpenChangelog").textContent=i18n("openChangelog");
 	document.getElementById("labelShowPageAction").textContent=i18n("showPageAction");
+	document.getElementById("labelReaderMode").textContent=i18n("labelReaderMode");
+	let readerMode=document.getElementById("readerMode").options;
+		readerMode[0].text=i18n("readerMode0");
+		readerMode[1].text=i18n("readerMode1");
+		readerMode[2].text=i18n("readerMode2");
+		readerMode[3].text=i18n("readerMode3");
 }
 
 function i18n(e,s1){

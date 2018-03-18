@@ -178,5 +178,24 @@
   },
   "showPageAction": {
     "message": "Show button in the address bar"
+  },
+  "labelReaderMode": {
+    "message": "Reader mode"
+  },
+  "readerMode0": {
+    "message": "Do not open any page"
+  },
+  "readerMode1": {
+    "message": "Open only those pages that certainly can be displayed"
+  },
+  "readerMode2": {
+    "message": "Open pages except those that certainly can not be displayed"
+  },
+  "readerMode3": {
+    "message": "Open all pages"
+  },
+  "failedReaderTitle": {
+    "message": "Failed to load article from page",
+	"description": "This string must be copied from https://hg.mozilla.org/l10n-central/<lang-code>/file/tip/toolkit/chrome/global/aboutReader.properties where <lang-code> is eg. fr, zh-CN, pt-BR (aboutReader.loadError)"
   }
 }

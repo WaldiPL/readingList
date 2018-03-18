@@ -1,0 +1,201 @@
+{
+  "extensionName": {
+    "message": "阅读列表"
+  },
+  "extensionDescription": {
+    "message": "单击保存网页到阅读列表"
+  },
+  "extensionAction": {
+    "message": "添加到阅读列表"
+  },
+  "addAll": {
+    "message": "添加所有标签页到阅读列表"
+  },
+  "deletePage": {
+    "message": "从阅读列表中删除"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "deleteTitle": {
+    "message":  "你确定要删除这个页面吗?"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "options": {
+    "message": "选项"
+  },
+  "view": {
+    "message": "视图模式"
+  },
+  "compact": {
+    "message": "紧凑"
+  },
+  "normal": {
+    "message": "宽松"
+  },
+  "theme": {
+    "message": "主题"
+  },
+  "lightTheme": {
+    "message": "明亮"
+  },
+  "darkTheme": {
+    "message": "灰黑"
+  },
+  "whiteTheme": {
+    "message": "纯白"
+  },
+  "blackTheme": {
+    "message": "纯黑"
+  },
+  "showNotification": {
+    "message": "添加页面时显示通知"
+  },
+  "notificationTime": {
+    "message": "通知持续时间"
+  },
+  "rapidDeleting": {
+    "message": "快速删除"
+  },
+  "showNotificationBar": {
+    "message": "显示通知条"
+  },
+  "showSearchBar": {
+    "message": "显示搜索条"
+  },
+  "addToContextMenu": {
+    "message": "在右键菜单中添加功能按钮"
+  },
+  "iconTheme": {
+    "message": "按钮的颜色"
+  },
+  "backup": {
+    "message": "创建一个备份"
+  },
+  "added": {
+    "message": "添加到阅读列表"
+  },
+  "addedAll": {
+    "message": "添加所有标签到阅读列表"
+  },
+  "searchPlaceholer": {
+    "message": "搜索..."
+  },
+  "emptyH2": {
+    "message": "啥都没有哦"
+  },
+  "emptyList": {
+    "message": "你可以通过工具栏或者右键菜单来添加项目."
+  },
+  "showRL": {
+    "message": "显示阅读列表"
+  },
+  "version": {
+    "message": "版本 $1"
+  },
+  "changelog": {
+    "message": "更新日志"
+  },
+  "support": {
+    "message": "支持扩展"
+  },
+  "general": {
+    "message": "常规"
+  },
+  "sidebar": {
+    "message": "侧边栏"
+  },
+  "h3backup": {
+    "message": "备份"
+  },
+  "bugReport": {
+    "message": "提交一个 bug"
+  },
+  "spanBugReport": {
+    "message": "如果你发现了一个 bug 或者有好的点子可以提升这款软件，请发 issue 在"
+  },
+  "translation": {
+    "message": "本地化"
+  },
+  "spanTranslation1": {
+    "message": "如果你想让这个扩展拥有你的母语，请翻译"
+  },
+  "spanTranslation2": {
+    "message": "这个文件"
+  },
+  "spanTranslation3": {
+    "message": "然后发一个新的 issue 在"
+  },
+  "share": {
+    "message": "分享"
+  },
+  "spanShare": {
+    "message": "你喜欢这个扩展吗？分享并评论她，让更多人了解她并从中受益。"
+  },
+  "restoreBackup": {
+    "message": "从备份中恢复"
+  },
+  "restoreAlertH4": {
+    "message": "你确定想要从选定的备份中还原吗？"
+  },
+  "restoreAlertP": {
+    "message": "这个操作不可逆转，所有现在的数据都会被删除。如果你选择了含有错误的文件，这个扩展就无法工作。"
+  },
+  "restoreButton": {
+    "message": "从备份中恢复"
+  },
+  "restoreError": {
+    "message": "发生了错误，请重试"
+  },
+  "restoreOk": {
+    "message": "已经从备份中恢复了数据"
+  },
+  "showSort": {
+    "message": "显示排序按钮"
+  },
+  "sort": {
+    "message": "排序"
+  },
+  "descDate": {
+    "message": "从新到老"
+  },
+  "ascDate": {
+    "message": "从老到新"
+  },
+  "az": {
+    "message": "从 A 到 Z"
+  },
+  "za": {
+    "message": "从 Z 到 A"
+  },
+  "openChangelog": {
+    "message": "在升级之后显示更新功能列表"
+  },
+  "folderName": {
+    "message": "阅读列表(不要删除)"
+  },
+  "showPageAction": {
+    "message": "在地址栏显示添加按钮"
+  },
+  "labelReaderMode": {
+    "message": "阅读器模式"
+  },
+  "readerMode0": {
+    "message": "不在任何页面使用阅读器"
+  },
+  "readerMode1": {
+    "message": "在确定可以使用的页面启用阅读器"
+  },
+  "readerMode2": {
+    "message": "在所有可能使用的页面启用阅读器"
+  },
+  "readerMode3": {
+    "message": "在所有页面使用阅读器"
+  },
+  "failedReaderTitle": {
+    "message": "从页面载入文章失败",
+	"description": "This string must be copied from https://hg.mozilla.org/l10n-central/<lang-code>/file/tip/toolkit/chrome/global/aboutReader.properties where <lang-code> is eg. fr, zh-CN, pt-BR (aboutReader.loadError)"
+  }
+}
