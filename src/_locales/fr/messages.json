@@ -1,0 +1,6 @@
+{
+  "failedReaderTitle": {
+    "message": "Impossible de charger l’article à partir de la page",
+	"description": "This string must be copied from https://hg.mozilla.org/l10n-central/<lang-code>/file/tip/toolkit/chrome/global/aboutReader.properties where <lang-code> is eg. fr, zh-CN, pt-BR (aboutReader.loadError)"
+  }
+}
