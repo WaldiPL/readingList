@@ -120,7 +120,7 @@ function run(m,s){
 			});
 		});
 		browser.pageAction.setIcon({
-			path:(iconTheme==="white")?`icons/btn.svg#dark`:`icons/btn.svg#${iconTheme}`,
+			path:`icons/btn.svg#${iconTheme}`,
 			tabId:s.tab.id
 		});
 	}else if(m.addToContextMenu!=undefined){
@@ -187,10 +187,8 @@ function setIcon(tabId,url){
 			title:(a>=0)?browser.i18n.getMessage("deletePage"):browser.i18n.getMessage("extensionAction"),
 			tabId:tabId
 		});
-		let iconTheme2=iconTheme;
-		if(iconTheme==="white")iconTheme2="dark";
 		browser.pageAction.setIcon({
-			path:(a>=0)?`icons/btn.svg#${iconTheme2}D`:`icons/btn.svg#${iconTheme2}`,
+			path:(a>=0)?`icons/btn.svg#${iconTheme}D`:`icons/btn.svg#${iconTheme}`,
 			tabId:tabId
 		});
 		browser.pageAction.setTitle({

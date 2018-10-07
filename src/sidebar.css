@@ -15,7 +15,7 @@
 	--button-active:#0c0c0d33;
 	--sort-icon:url("icons/sort.svg");
 	--clear-icon:url("icons/clear.svg");
-	--checked-icon:url("icons/checked.svg");
+	--checked-icon:url("icons/checked.svg#l");
 	--popup-arrow:url("icons/arrow.svg#l");
 	--readerMode-icon:url("icons/icon2.svg#dark");
 }
@@ -331,13 +331,17 @@ body{
 	background-color:var(--button-active);
 }
 
-#search:focus+#clear,#search:hover+#clear{
+#clear{
 	background:var(--clear-icon) no-repeat;
 	height:16px;
 	width:16px;
 	position:absolute;
 	top:10px;
 	right:41px;
+	opacity:0;
+}
+
+#search:focus+#clear,#search:hover+#clear{
 	opacity:.8;
 }
 
