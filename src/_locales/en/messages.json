@@ -197,5 +197,11 @@
   "failedReaderTitle": {
     "message": "Failed to load article from page",
 	"description": "This string must be copied from https://hg.mozilla.org/l10n-central/<lang-code>/file/tip/toolkit/chrome/global/aboutReader.properties where <lang-code> is eg. fr, zh-CN, pt-BR (aboutReader.loadError)"
+  },
+  "deleteOpened": {
+	"message": "Delete page from the Reading List after opening"
+  },
+  "closeTab": {
+	"message": "Close tab after adding to the Reading List"
   }
 }

@@ -33,7 +33,9 @@ function handleInstalled(details){
 					"sort":"descDate",
 					"changelog":true,
 					"pageAction":false,
-					"readerMode":0
+					"readerMode":0,
+					"deleteOpened":false,
+					"closeTab":false
 				}});
 			}else if(result.settings.showSearchBar===undefined){
 				result.settings=Object.assign(result.settings,{
@@ -44,7 +46,9 @@ function handleInstalled(details){
 					"sort":"descDate",
 					"changelog":true,
 					"pageAction":false,
-					"readerMode":0
+					"readerMode":0,
+					"deleteOpened":false,
+					"closeTab":false
 				});
 				browser.storage.local.set({settings:result.settings});
 			}else if(result.settings.showSort===undefined){
@@ -53,7 +57,15 @@ function handleInstalled(details){
 					"sort":"descDate",
 					"changelog":true,
 					"pageAction":false,
-					"readerMode":0
+					"readerMode":0,
+					"deleteOpened":false,
+					"closeTab":false
+				});
+				browser.storage.local.set({settings:result.settings});
+			}else if(result.settings.deleteOpened===undefined){
+				result.settings=Object.assign(result.settings,{
+					"deleteOpened":false,
+					"closeTab":false
 				});
 				browser.storage.local.set({settings:result.settings});
 			}
@@ -282,11 +294,12 @@ function save(tab,thumb64,favicon64){
 		setIcon(tab.id,url);
 		pages.unshift(page);
 		thumbs.unshift(thumb);
-		browser.storage.local.set({pages:pages,thumbs:thumbs});
-		bookmarksAdd(tab);
-		if(settings.showNotification)notify("single",settings.notificationTime,tab);
-	}).then(()=>{
-		browser.runtime.sendMessage({"refreshList":true});
+		browser.storage.local.set({pages:pages,thumbs:thumbs}).then(()=>{
+			if(settings.closeTab)closeTab("single",tab.id);
+			bookmarksAdd(tab);
+			if(settings.showNotification)notify("single",settings.notificationTime,tab);
+			browser.runtime.sendMessage({"refreshList":true});
+		});
 	});
 }
 
@@ -385,10 +398,11 @@ function addAll(){
 					bookmarksAdd(tab);
 				}
 			});
-			browser.storage.local.set({pages:pages,thumbs:thumbs});
-			if(settings.showNotification)notify("all",settings.notificationTime);
-		}).then(()=>{
-			browser.runtime.sendMessage({"refreshList":true});
+			browser.storage.local.set({pages:pages,thumbs:thumbs}).then(()=>{
+				if(settings.closeTab)closeTab("all",e[0].windowId);
+				if(settings.showNotification)notify("all",settings.notificationTime);
+				browser.runtime.sendMessage({"refreshList":true});
+			});
 		});
 	});
 }
@@ -675,4 +689,22 @@ async function updateReader(id,tabId,url,i=0){
 function getURL(url){
 	if(url.charAt(0)==="a")url=decodeURIComponent(url.substr(17));
 	return url;
+}
+
+function closeTab(mode,id){
+	if(mode==="single"){
+		browser.windows.getCurrent({populate:true}).then(win=>{
+			if(win.tabs.length===1){
+				browser.tabs.create({}).then(()=>{
+					browser.tabs.remove(id);
+				});
+			}else{
+				browser.tabs.remove(id);
+			}
+		});
+	}else if(mode==="all"){
+		browser.windows.create({}).then(()=>{
+			browser.windows.remove(id);
+		});
+	}
 }

@@ -1,4 +1,8 @@
 let changelog=`[
+	{"version":"1.5.2",
+		"changes":["Added possibility to delete a page from the Reading List after opening","Added possibility to close a tab after adding a page to the Reading List","Added a link to 'Reading List' in options","Minor changes"],
+		"changesPL":["Dodano możliwość usunięcia strony z Czytelni po otwarciu ","Dodano możliwość zamknięcia karty po dodaniu strony do Czytelni","Dodano odnośnik do 'Czytelni' w opcjach","Drobne zmiany"]
+	},
 	{"version":"1.5.1",
 		"changes":["Fixed bugs #21 and #22","Minor changes"],
 		"changesPL":["Naprawiono błędy #21 i #22","Drobne zmiany"]

@@ -2,7 +2,7 @@
   "applications": {
     "gecko": {
       "id": "readinglist@waldemar.b",
-      "strict_min_version": "54.0a1"
+      "strict_min_version": "60.0a1"
     }
   },
   "permissions": [
@@ -49,7 +49,7 @@
   "manifest_version": 2,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "icons": {
     "48": "icons/icon.svg"
   },

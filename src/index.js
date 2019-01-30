@@ -40,7 +40,9 @@ function saveOptions(){
 		sort:				document.getElementById("sort").value,
 		changelog:			document.getElementById("openChangelog").checked,
 		pageAction:			document.getElementById("showPageAction").checked,
-		readerMode:			document.getElementById("readerMode").value
+		readerMode:			document.getElementById("readerMode").value,
+		deleteOpened:		document.getElementById("deleteOpened").checked,
+		closeTab:			document.getElementById("closeTab").checked
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
@@ -72,6 +74,8 @@ function restoreOptions(){
 		document.getElementById("openChangelog").checked=s.changelog!==false?true:false;
 		document.getElementById("showPageAction").checked=s.pageAction;
 		document.getElementById("readerMode").value=s.readerMode;
+		document.getElementById("deleteOpened").checked=s.deleteOpened;
+		document.getElementById("closeTab").checked=s.closeTab;
 	});
 }
 
@@ -95,8 +99,13 @@ function createBackup(){
 function translate(){
 	document.title=i18n("extensionName");
 	document.getElementById("optionsA").textContent=i18n("options");
+	document.getElementById("optionsA").title=i18n("options");
 	document.getElementById("changelogA").textContent=i18n("changelog");
+	document.getElementById("changelogA").title=i18n("changelog");
 	document.getElementById("supportA").textContent=i18n("support");
+	document.getElementById("supportA").title=i18n("support");
+	document.getElementById("readingListA").textContent=i18n("extensionName");
+	document.getElementById("readingListA").title=i18n("extensionName");
 	document.getElementById("h2options").textContent=i18n("options");
 	document.getElementById("h3general").textContent=i18n("general");
 	document.getElementById("labelShowNotification").textContent=i18n("showNotification");
@@ -153,6 +162,8 @@ function translate(){
 		readerMode[1].text=i18n("readerMode1");
 		readerMode[2].text=i18n("readerMode2");
 		readerMode[3].text=i18n("readerMode3");
+	document.getElementById("labelDeleteOpened").textContent=i18n("deleteOpened");
+	document.getElementById("labelCloseTab").textContent=i18n("closeTab");
 }
 
 function i18n(e,s1){

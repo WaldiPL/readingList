@@ -28,6 +28,7 @@ nav{
 	position:fixed;
 	background-color:#f9f9fa;
 	height:100%;
+	box-sizing:border-box;
 }
 
 #optionsA{
@@ -61,22 +62,24 @@ nav a{
 	margin-inline-start: 34px;
 	transition: background-color 150ms;
 	display:block;
-	padding:12px 10px 12px 44px;
+	padding:12px 10px 13px 44px;
 	background-position:left 10px center;
 	background-repeat:no-repeat;
 	background-size:24px 24px;
 	white-space:nowrap;
+	line-height:23px;
+	width:185px;
+	box-sizing:border-box;
 }
 
 @media (max-width:830px){
 	body{
-		grid-template-columns:110px auto;
+		grid-template-columns:82px auto;
 	}
 	nav a{
-		color:red;
 		overflow:hidden;
-		width:0;
-		padding-right:0;
+		width:0 !important;
+		padding-right:0 !important;
 	}
 }
 
@@ -85,32 +88,40 @@ nav a.active{
 }
 
 nav a.active:hover,nav a.active:focus{
-	background-color:#d5d5d6;
+	background-color:#0c0c0d26;
 }
 
 nav a.active:active{
-	background-color:#c9c9ca;
+	background-color:#0c0c0d33;
 }
 
 nav a:hover,nav a:focus{
-	background-color:#ebebeb;
+	background-color:#0c0c0d1a;
 	border-radius:2px;
 }
 
 nav a:active{
-	background-color:#dadada;
+	background-color:#0c0c0d26;
 }
 
-nav a img{
-	height:24px;
-	width:24px;
-	vertical-align:-6px;
-	padding-right:9px;
+nav a.bottomLink{
+	font-size:14px;
+	margin-inline-start: 34px;
+	padding:8px 10px 10px 44px;
+	background-position:left 14px center;
+	background-size:16px 16px;
+	line-height:18px;
+	position:absolute;
+}
+
+#readingListA{
+	background-image:url("/icons/icon2.svg#black");
+	bottom:30px;
 }
 
 section{
 	grid-area:content;
-	padding: 40px 28px 0 0;
+	padding: 40px 28px;
 	overflow:auto;
 }
 
@@ -147,7 +158,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:hover:not(:disabled),input[type="checkbox"]:focus:not(:disabled){
-	border-color: #0a84ff;;
+	border-color: #0a84ff;
 }
 
 button{
@@ -157,19 +168,20 @@ button{
 	margin: 0;
 	-moz-appearance: none;
 	min-height: 30px;
-	border: 1px solid #d7d7db;
+	border: 1px solid transparent;
 	border-radius: 2px;
-	background-color:#f9f9fa;
+	background-color:#0c0c0d1a;
 	font-family:Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
 	font-size:13px;
+	box-sizing:border-box;
 }
 
 button:hover,select:hover,#fileInput:hover,button:focus,select:focus{
-	background-color:#ebebeb;
+	background-color:#0c0c0d33;
 }
 
 button:active,select:active,#fileInput:active{
-	background-color:#dadada;
+	background-color:#0c0c0d4d;
 }
 
 .row{
@@ -199,9 +211,9 @@ select {
 	-moz-appearance: none;
 	min-height: 30px;
 	min-width: 100px;
-	border: 1px solid #d7d7db;
+	border: 1px solid transparent;
 	border-radius: 2px;
-	background-color:#f9f9fa;
+	background-color:#0c0c0d1a;
 	background-image:url("icons/dropdown.svg");
 	background-repeat:no-repeat;
 	background-position:right 8px center;
@@ -221,15 +233,17 @@ h2+article{
 
 article{
 	background:#fff;
-	margin:0 0 8px;
+	margin:16px 0;
 	padding:0 16px;
 	border:1px solid #f2f2f3;
 	max-width:700px;
+	border-radius:4px;
+	box-shadow:#0c0c0d1a 0px 1px 4px 0px;
+	transition:box-shadow 150ms;
 }
 
 article:hover{
-	box-shadow:0 1px 3px #0003;
-	transition:box-shadow 150ms;
+	box-shadow:#0c0c0d1a 0px 1px 4px 0px, #d7d7db 0px 0px 0px 5px;
 }
 
 .share{
@@ -268,9 +282,9 @@ article:hover{
 	height:28px;
 	margin:0 8px;
 	display:inline-block;
-	border:1px solid #d7d7db;
+	border:1px solid transparent;
 	border-radius:2px;
-	background-color:#f9f9fa;
+	background-color:#0c0c0d1a;
 	font-size:13px;
 	cursor:context-menu;
 	overflow:hidden;
@@ -282,7 +296,7 @@ article:hover{
 }
 
 #file{
-	height:28px;
+	height:30px;
 	width:200px;
 	opacity:0;
 	margin-right:-200px;
@@ -324,4 +338,8 @@ section a:hover,section a:focus{
 
 *:focus{
 	outline:none;
+}
+
+#optionsForm{
+	margin-bottom:35px;
 }
