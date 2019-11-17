@@ -32,6 +32,9 @@
   "compact": {
     "message": "Zwarty"
   },
+  "medium": {
+    "message": "Średni"
+  },
   "normal": {
     "message": "Normalny"
   },
@@ -188,9 +191,6 @@
   "readerMode1": {
     "message": "Otwieraj tylko te strony, które na pewno mogą być wyświetlone"
   },
-  "readerMode2": {
-    "message": "Otwieraj strony oprócz tych, które na pewno nie mogą być wyświetlone"
-  },
   "readerMode3": {
     "message": "Otwieraj wszystkie strony"
   },
@@ -203,5 +203,26 @@
   },
   "closeTab": {
 	"message": "Zamknij kartę po dodaniu do Czytelni"
+  },
+  "pageTitle": {
+	"message": "Nazwa strony"
+  },
+  "save": {
+	"message": "Zapisz"
+  },
+  "rename": {
+	"message": "Zmień nazwę"
+  },
+  "notfound": {
+	"message": "Nic nie znaleziono"
+  },
+  "faviconService": {
+    "message": "Usługa ikon stron"
+  },
+  "faviconSublabel": {
+    "message": "Używana po synchronizacji tylko dla nowych stron"
+  },
+  "native": {
+    "message": "Natywna"
   }
 }

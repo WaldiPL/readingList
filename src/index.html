@@ -24,11 +24,9 @@
 				><input type="range" min="5000" max="20000" step="1000" id="notificationTime"
 				><output id="oTime" for="notificationTime"></output> s
 			</div>
-
 			<div class="row">
 				<input type="checkbox" id="showNotificationBar"><label id="labelShowNotificationBar" for="showNotificationBar"></label>
 			</div>
-
 			<div class="row">
 				<input type="checkbox" id="addToContextMenu"><label id="labelAddToContextMenu" for="addToContextMenu"></label>
 			</div>
@@ -48,19 +46,16 @@
 				<input type="checkbox" id="showPageAction"><label id="labelShowPageAction" for="showPageAction"></label>
 			</div>
 			<div class="row">
-				<label id="labelReaderMode"></label
-				><select id="readerMode">
-					<option value="0"></option>
-					<option value="1"></option>
-					<option value="2"></option>
-					<option value="3"></option>
-				</select>
-			</div>
-			<div class="row">
-				<input type="checkbox" id="deleteOpened"><label id="labelDeleteOpened" for="deleteOpened"></label>
-			</div>
-			<div class="row">
 				<input type="checkbox" id="closeTab"><label id="labelCloseTab" for="closeTab"></label>
+			</div>
+			<div class="row">
+				<label id="labelFavicon"></label
+				><select id="favicon">
+					<option value="native"></option>
+					<option value="duckduckgo">DuckDuckGo</option>
+					<option value="google">Google</option>
+				</select>
+				<p id="sublabelFavicon" class="subLabel"></p>
 			</div>
 			<h3 id="h3sidebar"></h3>
 			<div class="row">
@@ -73,9 +68,13 @@
 				<input type="checkbox" id="rapidDeleting"><label id="labelRapidDeleting" for="rapidDeleting"></label>
 			</div>
 			<div class="row">
+				<input type="checkbox" id="deleteOpened"><label id="labelDeleteOpened" for="deleteOpened"></label>
+			</div>
+			<div class="row">
 				<label id="labelView"></label
 				><select id="view">
 					<option value="compact"></option>
+					<option value="medium"></option>
 					<option value="normal"></option>
 				</select>
 			</div>
@@ -93,6 +92,14 @@
 					<option value="ascDate"></option>
 					<option value="az"></option>
 					<option value="za"></option>
+				</select>
+			</div>
+			<div class="row">
+				<label id="labelReaderMode"></label
+				><select id="readerMode">
+					<option value="0"></option>
+					<option value="1"></option>
+					<option value="3"></option>
 				</select>
 			</div>
 			<h3 id="h3backup"></h3>
@@ -119,18 +126,17 @@
 		<h2 id="h2support"></h2>
 		<article>
 			<h3 id="h3bugReport"></h3>
-			<p><span id="spanBugReport"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank">GitHub</a>.</p>
+			<p><span id="spanBugReport"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank" class="extLink">GitHub</a>.</p>
 		</article>
 		<article>
 			<h3 id="h3translation"></h3>
-			<p><span id="spanTranslation1"></span> <a href="_locales/en/messages.json" target="_blank"><span id="spanTranslation2"></span></a> <span id="spanTranslation3"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank">GitHub</a>.</p>
+			<p><span id="spanTranslation1"></span> <a href="_locales/en/messages.json" target="_blank"><span id="spanTranslation2"></span></a> <span id="spanTranslation3"></span> <a href="https://github.com/WaldiPL/readingList/issues/new" target="_blank" class="extLink">GitHub</a>.</p>
 		</article>
 		<article>
 			<h3 id="h3share"></h3>
 			<p><span id="spanShare"></span></p>
 			<a class="share" id="twitter" href="https://twitter.com/home?status=Save%20a%20web%20page%20for%20later%20with%20%23ReadingList%20for%20%23Firefox.%20%23WebExtension%0Ahttps%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-twitter" target="_blank">Twitter</a
 			><a class="share" id="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-facebook" target="_blank">Facebook</a
-			><a class="share" id="googleplus" href="https://plus.google.com/share?url=https%3A//addons.mozilla.org/en-us/firefox/addon/readinglist?src=external-googleplus" target="_blank">Google+</a
 			><a class="share" id="amo" href="https://addons.mozilla.org/firefox/addon/readinglist/" target="_blank">addons.mozilla.org</a>
 		</article>
 	</section>

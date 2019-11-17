@@ -1,96 +1,17 @@
-#readinglistToolbar{
-	background:#f0f0f0;
-	position:fixed;
-	top:0;
-	left:0;
-	transition:top 200ms;
-	width:100%;
-	height:36px;
-	border-bottom:1px solid #e3e3e3;
-	z-index:2147483647;
-	display:grid;
-	grid-template-columns:40px auto max-content 38px;
-	grid-template-rows:100%;
-	grid-template-areas:"icon title button close";
-	box-sizing: content-box;
-	cursor:default;
-	-moz-user-select: none;
+#__readingList{
+	height:37px !important;
+	width:100% !important;
+	position:fixed !important;
+	top:0 !important;
+	left:0 !important;
+	padding:0 !important;
+	visibility:visible !important;
+	border:none !important;
+	transition:top 200ms !important;
+	z-index:214748364 !important;
 }
 
-#readinglistToolbar.hidden{
-	top:-37px;
-	transition:top 200ms;
-}
-
-#readinglistIcon{
-	grid-area:icon;
-	height: 16px;
-	width: 16px;
-	padding:10px 12px;
-	background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QkDDgYEVcDhjQAAAM5JREFUOMvd0yFOxFAQxvHfkCIojhsgsEgMF8AiCAbJGdg6iusaNJ4DgEEiuQEayRHYQBoGATRtswuLICSMmvfNe1/+mZnHX0dkpZZOR3qLB+FCaoVjaQtrw9fOit6h6vJXhbArnYN0i2vhqbuTGugMojEd4+XEpRDROJpTGxp8iDlC3PiuBwODmIqfNvFLgmUM/xNBnryPBaxopXvpxsyL0p60jfXFBGHSW5JP7VHpGZuL2ObKWSvM7OAKq9Kh0l3UvU1cJrKyn5WDX/2Nb6s8Op1wYmJSAAAAAElFTkSuQmCC");
-	background-repeat:no-repeat;
-	background-position:50%;
-	box-sizing: content-box;
-}
-
-#readinglistTitle{
-	grid-area:title;
-	color:#000000;
-	font-family: Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
-	font-size:12px;
-	line-height:12px;
-	margin-top:11px;
-	box-sizing: content-box;
-	text-align:left;
-}
-
-#readinglistButton{
-	grid-area:button;
-	font-family: Segoe UI,Tahoma,Helvetica Neue,Lucida Grande,Ubuntu,sans-serif;
-	font-size:14px;
-	color:#000;
-	line-height:14px;
-	height:14px;
-	background-color:#F9F9FA;
-	border:1px solid #d7d7d7;
-	margin:4px 0;
-	padding:6px 25px;
-	box-sizing: content-box;
-}
-
-#readinglistButton:hover{
-	background-color:#ebebeb;
-}
-
-#readinglistButton:active{
-	background-color:#dadada;
-}
-
-#readinglistClose{
-	grid-area:close;
-	height:20px;
-	width: 20px;
-	padding:8px 10px 8px 0;
-	margin-left: 8px;
-	box-sizing: content-box;
-}
-
-#readinglistCloseX{
-	height: 10px;
-	width: 10px;
-	padding: 5px;
-	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QkDDxY5RqjV+gAAAHRJREFUGNON0LENwkAMheHvSB/RMQSbsQA5KkSTdDBQKiZKlzI0RjpOFwlLluzn39KzEy7oMWlHxgI3bBgb0BSz/BXuITyRIl+hXevtEt6FanjDUA4ORZ1wLPpTaD9Re6o9N6G9A+U/3jN0OOONRwOcsWL5AOrvIfVHZMHQAAAAAElFTkSuQmCC');
-	background-repeat:no-repeat;
-	background-position:50%;
-	border-radius:2px;
-	display: block;
-	box-sizing: content-box;
-}
-
-#readinglistClose:hover #readinglistCloseX{
-	background-color:#d7d7d7;
-}
-
-#readinglistClose:active #readinglistCloseX{
-	background-color:#c0c0c0;
+#__readingList.hidden{
+	top:-37px !important;
+	transition:top 200ms !important;
 }

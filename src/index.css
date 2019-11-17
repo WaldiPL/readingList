@@ -270,10 +270,6 @@ article:hover{
 	background-color:#4267B2;
 }
 
-#googleplus{
-	background-color:#DB4437;
-}
-
 #amo{
 	background-color:#57BD35;
 }
@@ -342,4 +338,22 @@ section a:hover,section a:focus{
 
 #optionsForm{
 	margin-bottom:35px;
+}
+
+a.extLink::after{
+	background-image:url(icons/extLink.svg);
+	background-repeat:no-repeat;
+	background-size:16px 16px;
+	content:"";
+	display:inline-block;
+	height:16px;
+	width:16px;
+	margin:0 2px 0 3px;
+	vertical-align:sub;
+}
+
+.subLabel{
+	color:#737373;
+	font-size:85%;
+	margin:0;
 }

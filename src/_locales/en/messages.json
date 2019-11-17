@@ -32,6 +32,9 @@
   "compact": {
     "message": "Compact"
   },
+  "medium": {
+    "message": "Medium"
+  },
   "normal": {
     "message": "Normal"
   },
@@ -188,9 +191,6 @@
   "readerMode1": {
     "message": "Open only those pages that certainly can be displayed"
   },
-  "readerMode2": {
-    "message": "Open pages except those that certainly can not be displayed"
-  },
   "readerMode3": {
     "message": "Open all pages"
   },
@@ -203,5 +203,26 @@
   },
   "closeTab": {
 	"message": "Close tab after adding to the Reading List"
+  },
+  "pageTitle": {
+	"message": "Page title"
+  },
+  "save": {
+	"message": "Save"
+  },
+  "rename": {
+	"message": "Rename"
+  },
+  "notfound": {
+	"message": "Nothing found"
+  },
+  "faviconService": {
+    "message": "Favicon service"
+  },
+  "faviconSublabel": {
+    "message": "Used after synchronization only for new pages"
+  },
+  "native": {
+    "message": "Native"
   }
 }

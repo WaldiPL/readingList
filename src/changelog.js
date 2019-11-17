@@ -1,4 +1,10 @@
+"use strict";
+
 let changelog=`[
+	{"version":"1.5.5",
+		"changes":["Added possibility to rename pages #23","Added a new view - 'medium'","Search engine now searches entire website addresses, also in a compact view","Fixed a problem with deleting sorted pages","Added possibility to change a 'Favicon service' (Native, Google, DuckDuckGo)","Fixed bugs","Minor changes"],
+		"changesPL":["Dodano możliwość zmiany nazwy strony #23","Dodano nowy widok - 'średni'","Wyszukiwarka przeszukuje teraz całe adresy stron, również w widoku zwartym","Naprawiono problem z usuwaniem posortowanych stron","Dodano mozliwość zmiany 'Usługi ikon stron' (Natywna, Google, DuckDuckGo)","Naprawiono błędy","Drobne zmiany"]
+	},
 	{"version":"1.5.2",
 		"changes":["Added possibility to delete a page from the Reading List after opening","Added possibility to close a tab after adding a page to the Reading List","Added a link to 'Reading List' in options","Minor changes"],
 		"changesPL":["Dodano możliwość usunięcia strony z Czytelni po otwarciu ","Dodano możliwość zamknięcia karty po dodaniu strony do Czytelni","Dodano odnośnik do 'Czytelni' w opcjach","Drobne zmiany"]

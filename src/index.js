@@ -1,3 +1,5 @@
+"use strict";
+
 (function(){
 	let section=window.location.hash;
 	if(!section)window.location.hash="#options";
@@ -42,14 +44,15 @@ function saveOptions(){
 		pageAction:			document.getElementById("showPageAction").checked,
 		readerMode:			document.getElementById("readerMode").value,
 		deleteOpened:		document.getElementById("deleteOpened").checked,
-		closeTab:			document.getElementById("closeTab").checked
+		closeTab:			document.getElementById("closeTab").checked,
+		faviconService:		document.getElementById("favicon").value
 	};
 	browser.storage.local.set({settings:settings});
 	browser.runtime.sendMessage({"refreshList":true});
 }
 
 function restoreOptions(){
-	browser.storage.local.get('settings').then(result=>{
+	browser.storage.local.get("settings").then(result=>{
 		let s=result.settings;
 		document.getElementById("view").value=s.view;
 		document.getElementById("theme").value=s.theme;
@@ -76,6 +79,7 @@ function restoreOptions(){
 		document.getElementById("readerMode").value=s.readerMode;
 		document.getElementById("deleteOpened").checked=s.deleteOpened;
 		document.getElementById("closeTab").checked=s.closeTab;
+		document.getElementById("favicon").value=s.faviconService||"native";
 	});
 }
 
@@ -97,7 +101,6 @@ function createBackup(){
 }
 
 function translate(){
-	document.title=i18n("extensionName");
 	document.getElementById("optionsA").textContent=i18n("options");
 	document.getElementById("optionsA").title=i18n("options");
 	document.getElementById("changelogA").textContent=i18n("changelog");
@@ -124,7 +127,8 @@ function translate(){
 	document.getElementById("labelView").textContent=i18n("view");
 	let view=document.getElementById("view").options;
 		view[0].text=i18n("compact");
-		view[1].text=i18n("normal");
+		view[1].text=i18n("medium");
+		view[2].text=i18n("normal");
 	document.getElementById("labelTheme").textContent=i18n("theme");
 	let theme=document.getElementById("theme").options;
 		theme[0].text=i18n("lightTheme");
@@ -160,10 +164,12 @@ function translate(){
 	let readerMode=document.getElementById("readerMode").options;
 		readerMode[0].text=i18n("readerMode0");
 		readerMode[1].text=i18n("readerMode1");
-		readerMode[2].text=i18n("readerMode2");
-		readerMode[3].text=i18n("readerMode3");
+		readerMode[2].text=i18n("readerMode3");
 	document.getElementById("labelDeleteOpened").textContent=i18n("deleteOpened");
 	document.getElementById("labelCloseTab").textContent=i18n("closeTab");
+	document.getElementById("labelFavicon").textContent=i18n("faviconService");
+	document.getElementById("favicon").options[0].text=i18n("native");
+	document.getElementById("sublabelFavicon").textContent=i18n("faviconSublabel");
 }
 
 function i18n(e,s1){
@@ -175,6 +181,7 @@ function changeActive(e){
 	document.getElementById("changelogA").removeAttribute("class");
 	document.getElementById("supportA").removeAttribute("class");
 	document.getElementById(e+"A").className="active";
+	document.title=i18n("extensionName")+" | "+i18n(e);	
 }
 
 let uploaded;
@@ -194,11 +201,11 @@ function handleFileSelect(e){
 			}
 			document.getElementById("restoreOk").className="none";
 		};
-		reader.onerror=function(event){
+		reader.onerror=function(){
 			document.getElementById("restoreAlert").className="none";
 			document.getElementById("restoreOk").className="none";
 			document.getElementById("restoreError").removeAttribute("class");
-		}
+		};
 		reader.readAsText(file);
 	}
 }

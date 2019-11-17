@@ -1,3 +1,5 @@
+"use strict";
+
 (function(){
 	list(true);
 	translate();
@@ -26,6 +28,8 @@
 		document.getElementById("search").value="";
 		search();
 	});
+	document.getElementById("editSave").addEventListener("click",saveTitle);
+	document.getElementById("editClose").addEventListener("click",closeEdit);
 })();
 
 function list(sync){
@@ -63,7 +67,7 @@ function list(sync){
 					pageContainer.id="page"+i;
 				let eA=document.createElement("a");
 					eA.className="pages";
-					if((settings.readerMode==1&&value.reader===true)||(settings.readerMode==2&&value.reader!==false)||settings.readerMode==3){
+					if((settings.readerMode==1&&value.reader===true)||(settings.readerMode==2&&value.reader===true)||settings.readerMode==3){
 						eA.href=value.url;
 						if(value.reader)eA.className="pages readerMode";
 
@@ -129,7 +133,6 @@ function list(sync){
 								});	
 							}
 						});
-						
 					}else{
 						eA.href=value.url;
 						eA.addEventListener("click",e=>{
@@ -142,7 +145,7 @@ function list(sync){
 						});
 						if(!settings.deleteOpened){
 							if(thumbs[i].base==="icons/thumb.svg"){
-								eA.addEventListener("click",e=>{
+								eA.addEventListener("click",()=>{
 									browser.runtime.sendMessage({"updateThumb":true,"id":i,"url":value.url});
 								});
 								eA.addEventListener("mouseup",e=>{
@@ -151,7 +154,7 @@ function list(sync){
 								});
 							}
 							if(value.reader===undefined){
-								eA.addEventListener("click",e=>{
+								eA.addEventListener("click",()=>{
 									browser.runtime.sendMessage({"updateReader":true,"id":i,"url":value.url});
 								});
 								eA.addEventListener("mouseup",e=>{
@@ -162,7 +165,7 @@ function list(sync){
 						}
 					}
 					if(settings.deleteOpened){
-						eA.addEventListener("click",e=>{
+						eA.addEventListener("click",()=>{
 							deletePage(i);
 						});
 						eA.addEventListener("auxclick",e=>{
@@ -177,9 +180,12 @@ function list(sync){
 					eTitle.textContent=value.title;
 				let eDelete=document.createElement("div");
 					eDelete.className="delete";
+					eDelete.title=i18n("delete");
 					eDelete.addEventListener("click",()=>{deleteLeter(i,settings.rapidDeleting);});
-					eDelete.addEventListener("mouseover",()=>{hover(i);});
-					eDelete.addEventListener("mouseout",()=>{hover(i);});
+				let eEdit=document.createElement("div");
+					eEdit.className="edit";
+					eEdit.title=i18n("rename");
+					eEdit.addEventListener("click",e=>{editTitle(e,i);});
 				let eFavicon=document.createElement("img");
 					eFavicon.src=value.favicon;
 					eFavicon.className="favicon";
@@ -200,23 +206,67 @@ function list(sync){
 				}else if(view==="compact"){
 					eA.appendChild(eFavicon);
 					eA.appendChild(eTitle);
+				}else if(view==="medium"){
+					let eUrl=document.createElement("div");
+						eUrl.className="url";
+						eUrl.textContent=value.domain;
+					eA.appendChild(eFavicon);
+					eA.appendChild(eTitle);
+					eA.appendChild(eUrl);
 				}
+				let buttons=document.createElement("div");
+					buttons.className="buttons";
 				pageContainer.appendChild(eA);
-				pageContainer.appendChild(eDelete);
+				buttons.appendChild(eEdit);
+				buttons.appendChild(eDelete);
+				pageContainer.appendChild(buttons);
 				container.appendChild(pageContainer);
 			});
-			let firstFavicon=document.getElementsByClassName("favicon")[0].src;
+			let firstFavicon=document.getElementById("page0").getElementsByClassName("favicon")[0].src;
 			if(!firstFavicon.startsWith("data:image"))convertFavicons();
 			sortList(settings.sort,true);
 		}
 		search();
+		closeEdit();
 		if(sync)browser.runtime.sendMessage({"sync":true});
 	});
 }
 
+function editTitle(e,id){
+	const scrollTop=document.getElementById("readinglist").scrollTop;
+	const input=document.getElementById("editInput");
+		input.value=document.getElementById("page"+id).getElementsByClassName("title")[0].textContent;
+	const container=document.getElementById("editContainer");
+		container.style.top=e.target.parentElement.offsetTop-scrollTop+"px";
+	const save=document.getElementById("editSave");
+		save.dataset.id=id;
+	document.getElementById("editOverlay").className="";
+	input.focus();
+}
+
+function saveTitle(e){
+	const id=e.target.dataset.id;
+	const newTitle=document.getElementById("editInput").value;
+	browser.storage.local.get("pages").then(result=>{
+		const pages=result.pages;
+		Object.assign(pages[id],{title:newTitle});
+		browser.storage.local.set({pages}).then(()=>{
+			document.getElementById("page"+id).getElementsByClassName("title")[0].textContent=newTitle;
+			browser.runtime.sendMessage({"refreshList":true});
+			browser.runtime.sendMessage({"updateBookmarkTitle":true,"url":pages[id].url,"title":newTitle});
+			sortList(document.getElementById("readinglist").dataset.sort,true);
+			closeEdit();
+		});
+	});
+}
+
+function closeEdit(){
+	document.getElementById("editOverlay").className="hidden";
+	document.getElementById("editInput").value=" ";
+}
+
 function sortList(mode="descDate",auto){
 	let rl=document.getElementById("readinglist"),
-		view=document.body.className,
 		btnSort=document.getElementById("popupSort").children;
 	document.getElementById("sort").classList.remove("active");
 	document.getElementById("popupSort").className="hidden";
@@ -224,7 +274,7 @@ function sortList(mode="descDate",auto){
 	if(!auto){
 		browser.storage.local.get("settings").then(result=>{
 			let s=result.settings;
-			s=Object.assign(s,{sort:mode});
+			Object.assign(s,{sort:mode});
 			browser.storage.local.set({settings:s});
 		});
 	}
@@ -298,9 +348,9 @@ function deleteLeter(id,rapid){
 	if(rapid){
 		deletePage(id);
 	}else{
-		let pages=document.getElementsByClassName("pages")[id].classList;
+		let pages=document.getElementById("page"+id).getElementsByClassName("pages")[0].classList;
 		pages.toggle("deleting");
-		document.getElementsByClassName("delete")[id].classList.toggle("deleting");
+		document.getElementById("page"+id).getElementsByClassName("buttons")[0].classList.toggle("deleting");
 		document.getElementById("readinglist").classList.toggle("deleting");
 		if(pages.contains("deleting")){
 			timeout1=setTimeout(function(){deletePage(id);},2000);
@@ -323,10 +373,6 @@ function deletePage(id){
 	});
 }
 
-function hover(id){
-	document.getElementsByClassName("pages")[id].classList.toggle("hover");
-}
-
 browser.runtime.onMessage.addListener(run);
 function run(m){
 	if(m.refreshList)list();
@@ -336,11 +382,13 @@ function search(){
 	let q=document.getElementById("search").value.toLowerCase();
 	let p=document.getElementsByClassName("pages");
 	[...p].forEach(e=>{
-		if(e.getElementsByClassName("title")[0].textContent.toLowerCase().includes(q)||(document.body.classList.contains("normal")&&e.getElementsByClassName("url")[0].textContent.toLowerCase().includes(q)))
-			e.classList.remove("none");
+		if(e.getElementsByClassName("title")[0].textContent.toLowerCase().includes(q)||e.href.toLowerCase().includes(q))
+			e.parentElement.classList.remove("none");
 		else
-			e.classList.add("none");
+			e.parentElement.classList.add("none");
 	});
+	const hiddenPages=document.getElementById("readinglist").getElementsByClassName("none").length;
+	document.getElementById("readinglist").dataset.notfound=(p.length===hiddenPages&&hiddenPages>0)?i18n("notfound"):"false";
 }
 
 function i18n(e,s1){
@@ -355,38 +403,69 @@ function translate(){
 		sortPopup[1].textContent=i18n("ascDate");
 		sortPopup[2].textContent=i18n("az");
 		sortPopup[3].textContent=i18n("za");
+	document.title=i18n("extensionName");
+	document.getElementById("editInput").placeholder=i18n("pageTitle");
+	document.getElementById("editSave").textContent=i18n("save");
 }
 
 function convertFavicons(){
-	browser.storage.local.get("pages").then(result=>{
+	browser.storage.local.get(["pages","settings"]).then(result=>{
 		let pages=result.pages;
+		const settings=result.settings;
+		const mode=settings.faviconService;
 		for(let i=0;i<pages.length;i++){
-			favicon64(pages[i].favicon,(b64,fc)=>{
-				pages[i]=Object.assign(pages[i],{favicon:b64});
-				if(fc===pages.length){
+			if(pages[i].favicon.startsWith("http")){
+				favicon64(pages[i].favicon,mode).then(fav=>{
+					document.getElementById("page"+i).getElementsByClassName("favicon")[0].src=fav.icon;
+					Object.assign(pages[i],{favicon:fav.icon});
+					if(fav.count===pages.length){
+						browser.storage.local.set({pages:pages});
+					}
+				});
+			}else{
+				faviconCount++;
+				if(faviconCount===pages.length){
 					browser.storage.local.set({pages:pages});
 				}
-			});
+			}
 		}
 	});
 }
 
 let faviconCount=0;
-function favicon64(faviconSrc,callback){
-	let img=new Image();
-	img.onload=e=>{
-		faviconCount++;
-		let canvas=document.createElement('canvas'),
-			ctx=canvas.getContext('2d');
-		canvas.width=16;
-		canvas.height=16;
-		ctx.drawImage(e.target,0,0,16,16);
-		let dataURL=canvas.toDataURL();
-		callback(dataURL,faviconCount);
-	};
-	img.onerror=()=>{
-		faviconCount++;
-		callback("icons/fav.png",faviconCount);
-	}
-	img.src=faviconSrc;
+function favicon64(url,mode){
+	return new Promise((resolve,reject)=>{
+		let img=new Image();
+		img.onload=e=>{
+			faviconCount++;
+			let canvas=document.createElement("canvas"),
+				ctx=canvas.getContext("2d");
+			canvas.width=16;
+			canvas.height=16;
+			ctx.drawImage(e.target,0,0,16,16);
+			let dataURL=canvas.toDataURL();
+			if(dataURL==="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACD0lEQVQ4ja2TwWvacBTHe+0f4an/i9CTM530VM3sZY3LRCpSawaVbNXDdh47VGy9JDKCNNBEaVqQgBsNZTskCAFJhHZQAyHQ0kMN3x1KftPWnbYH7/R73w/vvd/3LS39r0gV2svxRCPG8QpVfCdrm2/bQYo+ClP0UZhl20GRk7Uyr1DxRCOWKrSXn4lX15sr+Z1OPZsTrf2Pp15LusSBeIGWdAndcLFX63kZRrDypU59db25MgeJJxqxfKlT32S/jj996UNSTXT7Nib+PZyrAABwfXOHbt8GzQhjttSpxxONGAGUeYXKMIKlGy4k1YSkmpC1IWRtSADTEDgbjHA+GCHNCFaZVygCKHKytlfredMQBBBlcPsAAAhuHyCpJn5Yv8B96Hrb3LFGAFm2HeiGS4qeiqMOTHsCSTWhGy7onBgQwMvMYWg7PgCg27dh2pM5cRRngxEk1YTt+FjbaIZzgOubO9JqtMBFAFkbwnZ8ULOAV2/EQDfcuWLdcElGcACY+PfQDRcZRvgzQpGTtWqt580Cnu7j+88r8rZTPfEKlZklVt4ryegb/waQVBPT8LGz9JZgVapK8pmRaEYYz0Jsxydi2/Efxa8XGCmyMlvq1NOMYO3yiqcbLs4HIxyIF/jc+oZdXvXSW4LFLrLy7DFVqkpymzvW6JwYrKUPQ2qjGWYYIdiuyKfcfvfFwmP6l/gNHYU5BdT5NkIAAAAASUVORK5CYII="||
+			   dataURL==="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAUklEQVQ4jWNgwAKmTp26ferUqYfQ8HZsaonRSJxBRGhEweTYjNsl+Gwh6ApcthPpve2EbSDkSlICi/4GEOsFygKR4mikSkKiOCmT6BKycyVWjQAj+9YckubstwAAAABJRU5ErkJggg=="||
+			   dataURL==="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAEklEQVQ4jWNgGAWjYBSMAggAAAQQAAF/TXiOAAAAAElFTkSuQmCC"){
+			dataURL="icons/fav.png";
+			}
+			resolve({icon:dataURL,count:faviconCount});
+		};
+		
+		img.onerror=()=>{
+			faviconCount++;
+			resolve({icon:"icons/fav.png",count:faviconCount});
+		};
+		
+		switch(mode){
+		case "google":
+			img.src=`https://www.google.com/s2/favicons?domain=${url.split("://")[1]}`;
+			break;
+		case "duckduckgo":
+			img.src=`https://proxy.duckduckgo.com/ip3/${url.split("://")[1]}`;
+			break;
+		default:
+			img.src=url;
+		}
+	});
 }

@@ -188,9 +188,6 @@
   "readerMode1": {
     "message": "在确定可以使用的页面启用阅读器"
   },
-  "readerMode2": {
-    "message": "在所有可能使用的页面启用阅读器"
-  },
   "readerMode3": {
     "message": "在所有页面使用阅读器"
   },

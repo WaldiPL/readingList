@@ -1,36 +1,46 @@
+"use strict";
+
 (function(){
-	const inserted=document.getElementById("readinglistToolbar");
+	const inserted=document.getElementById("__readingList");
 	if(!inserted){
-		let toolbar=document.createElement("x-toolbar"),
-			icon=document.createElement("x-icon"),
-			title=document.createElement("x-text"),
-			button=document.createElement("x-button"),
-			close=document.createElement("x-close");
-			closeX=document.createElement("x-closex");
+		let iframe=document.createElement("iframe"),
+			css=document.createElement("link"),
+			toolbar=document.createElement("div"),
+			icon=document.createElement("div"),
+			title=document.createElement("span"),
+			button=document.createElement("button"),
+			close=document.createElement("div"),
+			closeX=document.createElement("div");
+
+		iframe.id="__readingList";
+		iframe.className="hidden";
+		css.rel="stylesheet";
+		css.href=browser.extension.getURL("")+"toolbar.css";
 		toolbar.id="readinglistToolbar";
-		toolbar.className="hidden";
 		icon.id="readinglistIcon";
 		title.id="readinglistTitle";
 		button.id="readinglistButton";
 		close.id="readinglistClose";
-		close.addEventListener("click",e=>{
-			toolbar.className="hidden";
+		close.addEventListener("click",()=>{
+			iframe.className="hidden";
 		});
 		close.title=browser.i18n.getMessage("close");
 		closeX.id="readinglistCloseX";
 		title.textContent=browser.i18n.getMessage("deleteTitle");
 		button.textContent=browser.i18n.getMessage("delete");
-		button.addEventListener("click",e=>{
+		button.addEventListener("click",()=>{
 			browser.runtime.sendMessage({fromContent:true});
 		});
-		toolbar.appendChild(icon);
-		toolbar.appendChild(title);
-		toolbar.appendChild(button);
+		toolbar.append(icon,title,button,close);
 		close.appendChild(closeX);
-		toolbar.appendChild(close);
-		document.body.appendChild(toolbar);
+		document.body.appendChild(iframe);
+
+		iframe.onload=()=>{
+			iframe.contentDocument.head.appendChild(css);
+			iframe.contentDocument.body.appendChild(toolbar);
+		};
 		setTimeout(()=>{
-			toolbar.removeAttribute("class");
+			iframe.removeAttribute("class");
 		},10000);
 	}
 })();

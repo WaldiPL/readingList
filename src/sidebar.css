@@ -3,10 +3,15 @@
 	--background-hover:#0c0c0d1a;
 	--text-color:#0c0c0d;
 	--border-color:#ccc;
+	--border-focus:#0a84ff;
 	--domain-color:#0a84ff;
 	--thumb-color:#fff;
 	--delete-color:#d70022;
 	--delete-hover:#a4000f;
+	--delete-active:#5a0002;
+	--edit-color:#0060df;
+	--edit-hover:#003eaa;
+	--edit-active:#002275;
 	--search-color:#fff;
 	--search-icon:url("icons/search.svg");
 	--empty-color:#737373;
@@ -19,17 +24,23 @@
 	--readerMode-icon:url("icons/icon2.svg#dark");
 	--scrollbar-thumb:auto;
 	--scrollbar-track:auto;
+	--overlay-background:rgba(12,12,13,0.8);
 }
 
 .dark:root {
 	--background-color:#323234;
 	--background-hover:#5b5b5d;
 	--text-color:#f9f9fa;
-	--border-color:#0c0c0d;
+	--border-color:#262627;
+	--border-focus:#0a84ff;
 	--domain-color:#45a1ff;
 	--thumb-color:#fff;
 	--delete-color:#d70022;
 	--delete-hover:#ff0039;
+	--delete-active:#5a0002;
+	--edit-color:#0060df;
+	--edit-hover:#0a84ff;
+	--edit-active:#002275;
 	--search-color:#474749;
 	--search-icon:url("icons/search.svg#d");
 	--empty-color:#737373;
@@ -42,6 +53,7 @@
 	--readerMode-icon:url("icons/icon2.svg#light");
 	--scrollbar-thumb:#737373;
 	--scrollbar-track:#3c3c3d;
+	--overlay-background:rgba(12,12,13,0.9);
 }
 
 html{
@@ -82,29 +94,60 @@ body{
 
 .compact .pages{
 	height:22px;
-	padding: 5px 0 5px 5px;
+	padding:4px;
 	text-decoration: none;
 	color: var(--text-color);
 	width:100%;
 	
-	grid-template-columns: 18px auto;
+	grid-template-columns: 22px auto;
 	grid-template-areas: "icon title";
+}
+
+.medium .pages{
+	height:30px;
+	padding:4px;
+	text-decoration:none;
+	color:var(--text-color);
+	width:100%;
+	
+	grid-template-columns: 34px auto;
+	grid-template-rows:auto 1fr;
+	grid-template-areas: "icon title" "icon url";
+}
+
+.compact #readinglist>div:not(#emptyList)::after{
+  content:"";
+  display:block;
+  border-bottom:1px solid var(--border-color);
+  margin:0 4px 0 26px;
+}
+
+.medium #readinglist>div:not(#emptyList)::after{
+  content:"";
+  display:block;
+  border-bottom:1px solid var(--border-color);
+  margin:0 4px 0 38px;
 }
 
 .normal .boxThumb{
 	grid-area:thumb;
 }
+
+.medium .url,
 .normal .url{
 	grid-area:url;
 }
+
+.medium .favicon,
 .compact .favicon{
 	grid-area:icon;
 }
+
 .title{
 	grid-area:title;
 }
 
-.pages:hover, .pages.hover{
+#readinglist > div:hover .pages{
 	background:var(--background-hover);
 }
 
@@ -121,19 +164,18 @@ body{
 
 .normal .thumb{
 	display:block;
-	height:40px;
-	width:64px;
+	height:46px;
+	width:72px;
 	border:1px solid var(--border-color);
-	margin:3px 10px 3px 3px;
-	padding:2px;
+	margin:1px;
 	background:var(--thumb-color);
 }
 
 .normal .favicon{
 	background:var(--thumb-color);
 	position: relative;
-	top: -25px;
-	left: 3px;
+	top: -23px;
+	left: 1px;
 	height:16px;
 	width:16px;
 	border:1px solid var(--border-color);
@@ -143,8 +185,16 @@ body{
 .compact .favicon{
 	height:16px;
 	width:16px;
-	float: left;
-	margin: 2px 0 -2px 0;
+	padding:3px 0;
+}
+
+.medium .favicon{
+	background:var(--search-color);
+	height:16px;
+	width:16px;
+	border:1px solid var(--border-color);
+	border-radius:2px;
+	padding:6px;
 }
 
 .normal .title{
@@ -155,62 +205,118 @@ body{
 }
 
 .compact .title{
-	float: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-height: 16px;
+	line-height: 20px;
+	overflow-wrap: break-word;
+	width: calc(100% - 10px);
+	overflow:hidden;
+}
+
+.medium .title{
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-height: 16px;
 	line-height: 16px;
 	overflow-wrap: break-word;
-	padding: 0 0 0 5px;
-	margin: 2px 0 -2px 0;
-	width: calc(100% - 22px);
+	width: calc(100% - 10px);
 	overflow:hidden;
+	margin-top:-1px;
 }
 
+.medium .url,
 .normal .url{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-height:15px;
-	line-height: 15px;
+	line-height: 14px;
 	color:var(--domain-color);
+	width: calc(100% - 10px);
+}
+
+.buttons{
+	display:flex;
+	justify-content:flex-end;
+	float:right;
+	box-sizing:border-box;
+}
+
+.normal .buttons{
+	width:30px;
+	margin:-60px -30px 0 0;
+}
+
+.compact .buttons{
+	width:60px;
+	margin:-30px -60px 0 0;
+}
+
+.medium .buttons{
+	width:60px;
+	margin:-38px -60px 0 0;
+}
+
+#readinglist > div:hover > .buttons,
+.buttons:hover{
+	transition:margin-right 150ms 150ms ease-in-out;
+	margin-right:0;
+}
+
+.edit{
+	width:30px;
+	background:var(--edit-color) url("icons/edit.svg") no-repeat center;
+	box-sizing:border-box;
+	z-index:2;
+}
+
+.normal .edit,
+.compact .edit{
+	height:30px;
+}
+
+.medium .edit{
+	height:38px;
+}
+
+.edit:hover{
+	background-color:var(--edit-hover);
+}
+
+.edit:active{
+	background-color:var(--edit-active);
 }
 
 .delete{
-	width:0;
-	float:right;
-	background:var(--delete-color) url("icons/trash.svg") no-repeat center;
-	position:relative;
+	width:30px;
+	background:var(--delete-color) url("icons/trash.svg") no-repeat;
 	box-sizing:border-box;
+	z-index:1;
 }
 
 .normal .delete{
 	height:60px;
-	margin:-60px -33px 0 0;
+	background-position:center bottom 7px;
+	margin-left:-30px;
 }
 
 .compact .delete{
-	height:32px;
-	margin:-32px -33px 0 0;
+	height:30px;
+	background-position:center;
+}
+
+.medium .delete{
+	height:38px;
+	background-position:center;
 }
 
 .delete:hover{
-	background:var(--delete-hover) url("icons/trash.svg") no-repeat center;
+	background-color:var(--delete-hover);
 }
 
-.normal .pages:hover + .delete,.normal  .delete:hover{
-	padding:22px 8px;
-}
-
-.compact .pages:hover + .delete,.compact  .delete:hover{
-	padding:8px;
-}
-
-.pages:hover + .delete, .delete:hover{
-	display:block;
-	margin-right:0;
-	width:33px;
-	transition:margin-right 150ms 150ms ease-in-out;
+.delete:active{
+	background-color:var(--delete-active);
 }
 
 .pages.deleting{
@@ -222,23 +328,20 @@ body{
 				padding 200ms 1800ms;
 }
 
-.delete.deleting{
+.buttons.deleting{
+	width:100%;
+	margin-right:0;
+}
+
+.buttons.deleting .delete{
 	display:block;
 	margin-right:0;
-	background:var(--delete-color) url("icons/undo.svg") no-repeat right 8px center;
+	background:var(--delete-color) url("icons/undo.svg") no-repeat right 7px center;
 	opacity:0;
 	width:100%;
 	transition:	background-color 200ms,
 				width 2000ms,
 				opacity 200ms 1700ms !important;
-}
-
-.normal .delete.deleting{
-	padding:22px 8px;
-}
-
-.compact .delete.deleting{
-	padding:8px;
 }
 
 .pages.deleting div,
@@ -247,16 +350,9 @@ body{
 	transition:	opacity 0ms 1700ms;
 }
 
-.normal #readinglist.deleting .delete:not(.deleting){
-	width:0 !important;
-	margin:-62px -33px 0 0 !important;
-	padding:23px 8px !important;
-}
-
-.compact #readinglist.deleting .delete:not(.deleting){
-	width:0 !important;
-	margin:-33px -33px 0 0 !important;
-	padding:8px !important;
+#readinglist.deleting .edit,
+#readinglist.deleting .buttons:not(.deleting) .delete{
+	display:none !important;
 }
 
 .none{
@@ -283,13 +379,26 @@ body{
 }
 
 #search:focus{
-	border-color:#0078d7;
+	border-color:var(--border-focus);
 }
 
 #readinglist{
 	overflow-y:auto;
 	overflow-x:hidden;
 	height:100%;
+}
+
+#readinglist:not([data-notfound="false"])::after{
+	content:attr(data-notfound);
+	display:block;
+	background:var(--search-icon) center bottom no-repeat;
+	background-size:80px;
+	width:calc(100% - 10px);
+	color:var(--empty-color);
+	font-size:1.5em;
+	font-weight:bold;
+	text-align:center;
+	padding:30px 5px 90px;
 }
 
 #searchbar:not(.none)+#readinglist{
@@ -422,4 +531,80 @@ body{
 	width:12px;
 	display:block;
 	margin-bottom:-10px;
+}
+
+#editOverlay{
+	background:var(--overlay-background);
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:3;
+	height:100%;
+	width:100%;
+}
+
+#editContainer{
+	position:fixed;
+	left:2px;
+	width:calc(100% - 4px);
+}
+
+#editInput{
+	height:30px;
+	width:calc(100% - 1px);
+	box-sizing:border-box;
+	color:var(--text-color);
+	background:var(--search-color);
+	border:1px solid var(--border-color);
+	border-radius:2px 0 0 2px;
+	padding:0 63px 0 5px;
+}
+
+#editInput:focus{
+	border-color:var(--border-focus);
+}
+
+#editSave{
+	height:30px;
+	width:60px;
+	border:none;
+	border-radius:0 2px 2px 0;
+	background:var(--edit-color);
+	color:#fff;
+	box-sizing:border-box;
+	padding:0;
+	margin:0 0 0 -59px;
+	position:relative;
+	right:0;
+	transition:right 150ms;
+}
+
+#editInput:placeholder-shown + #editSave{
+	right:-61px;
+}
+
+#editSave:hover{
+	background-color:var(--edit-hover);
+}
+
+#editSave:active{
+	background-color:var(--edit-active);
+}
+
+#editClose{
+	color:#fff;
+	font-size:22px;
+	height:32px;
+	width:32px;
+	padding-left:6px;
+	box-sizing:border-box;
+	float:right;
+}
+
+#editClose:hover{
+	color:var(--delete-color);
+}
+
+#editClose:active{
+	color:var(--delete-hover);
 }
